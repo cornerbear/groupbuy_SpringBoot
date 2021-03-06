@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class TestController {
-    @Autowired
-    JdbcTemplate jdbcTemplate;
+    
     @Autowired
     private TestService testService;
     
@@ -30,12 +29,12 @@ public class TestController {
         return testById;
     }
 
-    @GetMapping("tests")
+    @GetMapping("tests/{pageNo}/{pageSize}")
     @ResponseBody
-    public Page getTestS(@RequestParam(value = "pn",defaultValue = "1") Integer pn){
-
+    public Page getTestS(@PathVariable(value = "pageNo") Integer pageNo,@PathVariable(value = "pageSize") Integer pageSize){
+        
         // 分页查询数据 第几页，每页几个
-        Page<TTest> testPage = new Page<>(pn,2);
+        Page<TTest> testPage = new Page<>(pageNo,pageSize);
         Page<TTest> page = testService.page(testPage, null);
         return page;
     }
