@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/db_groupbuy?serverTimezone=GMT
+    url: jdbc:mysql://localhost:3306/db_groupbuy?serverTimezone=GMT&useSSL=false
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -28,7 +28,7 @@ spring:
 #  configuration:
 #    map-underscore-to-camel-case: true
 mybatis-plus:
-  mapper-locations: classpath:mybatis/mapper/*.xml
+  mapper-locations: classpath:mapper/**/*.xml
   
   configuration:
     map-underscore-to-camel-case: true
