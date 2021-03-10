@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * <p>
@@ -26,8 +27,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
     @Override
     public List<Category> getCategoryTree() {
-        List<Category> res = new LinkedList<>();
-        List<Category> sons = new LinkedList<>();
+        List<Category> res = new CopyOnWriteArrayList<>();
+        List<Category> sons = new CopyOnWriteArrayList<>();
         List<Category> list = this.list();
         for (Category category : list) {
             if (category.getParentCatId().equals("0")) {
@@ -48,7 +49,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         for (Category son : sons) {
             if (son.getParentCatId().equals(catId)) {
                 if(parent.getChildren() == null) 
-                    parent.setChildren(new LinkedList<>());
+                    parent.setChildren(new CopyOnWriteArrayList<>());
                 parent.getChildren().add(son);
                 sons.remove(son);
                 recursionCategory(son,sons);
