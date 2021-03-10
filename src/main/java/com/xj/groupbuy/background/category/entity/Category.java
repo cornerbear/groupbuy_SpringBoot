@@ -3,6 +3,7 @@ package com.xj.groupbuy.background.category.entity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -34,5 +35,8 @@ public class Category implements Serializable {
 
     @TableField("SORT")
     private int sort;
+
+    @TableField(exist = false)
+    private List<Category> children;
 
 }

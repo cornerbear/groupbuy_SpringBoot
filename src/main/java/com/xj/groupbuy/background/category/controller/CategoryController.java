@@ -30,6 +30,12 @@ public class CategoryController {
         return categoryService.list();
     }
     
+    @RequestMapping("categoryTree")
+    public CommonVO getCategoryTree(){
+        List<Category> list = categoryService.getCategoryTree();
+        return new CommonVO(true,list);
+    }
+    
     @PostMapping("category")
     public CommonVO addCategory(@RequestBody Category category){
 
