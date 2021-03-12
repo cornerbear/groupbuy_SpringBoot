@@ -33,11 +33,11 @@ public class User implements Serializable, UserDetails {
     @TableField("NAME")
     private String name;
     
-    @TableField("USER_NAME")
-    private String userName;
+    @TableField("USERNAME")
+    private String username;
 
-    @TableField("USER_PWD")
-    private String userPwd;
+    @TableField("PASSWORD")
+    private String password;
 
     @TableField("USER_SEX")
     private Integer userSex;
@@ -48,30 +48,38 @@ public class User implements Serializable, UserDetails {
     @TableField("USER_ADDRESS")
     private String userAddress;
 
+    @TableField("ENABLE")
+    private boolean enable;
+
+    @TableField(exist = false)
     private List<Role> roles;
 
-    public User(String userName, String userPwd) {
-        this.userName = userName;
-        this.userPwd = userPwd;
+    public User() {
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
-        return authorities;
+//        List<GrantedAuthority> authorities = new ArrayList<>();
+//        for (Role role : roles) {
+//            authorities.add(new SimpleGrantedAuthority(role.getName()));
+//        }
+//        return authorities;
+        return null;
     }
 
     @Override
     public String getPassword() {
-        return this.userPwd;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return this.userName;
+        return this.username;
     }
 
     @Override
@@ -91,6 +99,6 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enable;
     }
 }
