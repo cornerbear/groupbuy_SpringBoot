@@ -23,8 +23,8 @@ public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId("ROLE_ID")
-    private String roleId;
+    @TableId("ID")
+    private String id;
 
     private String name;
 

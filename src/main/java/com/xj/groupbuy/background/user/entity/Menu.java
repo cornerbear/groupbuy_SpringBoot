@@ -24,20 +24,20 @@ public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId("MENU_ID")
-    private Integer menuId;
+    @TableId("ID")
+    private String id;
 
-    @TableField("MENU_URL")
-    private String menuUrl;
+    @TableField("URL")
+    private String url;
 
-    @TableField("MENU_PATH")
-    private String menuPath;
+    @TableField("PATH")
+    private String path;
 
-    @TableField("MENU_COMPONENT")
-    private String menuComponent;
+    @TableField("COMPONENT")
+    private String component;
 
-    @TableField("MENU_NAME")
-    private String menuName;
+    @TableField("NAME")
+    private String name;
 
     @TableField("KEEP_ALIVE")
     private String keepAlive;

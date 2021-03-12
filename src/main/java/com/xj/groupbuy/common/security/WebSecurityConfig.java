@@ -40,11 +40,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     IUserService userService;
     @Autowired
+<<<<<<< Updated upstream
     UrlFilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource;
     @Autowired
     UrlAccessDecisionManager urlAccessDecisionManager;
     @Autowired
     AuthenticationAccessDeniedHandler authenticationAccessDeniedHandler;
+=======
+    CustomFilterInvocationSecurityMetadataSource customFilterInvocationSecurityMetadataSource;
+    @Autowired
+    CustomUrlDecisionManager customUrlDecisionManager;
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+>>>>>>> Stashed changes
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -53,7 +64,59 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
+<<<<<<< Updated upstream
         web.ignoring().antMatchers("/index.html", "/static/**");
+=======
+        web.ignoring().antMatchers("/css/**", "/js/**", "/index.html", "/img/**", "/fonts/**", "/favicon.ico", "/verifyCode");
+    }
+
+    @Bean
+    LoginFilter loginFilter() throws Exception {
+        LoginFilter loginFilter = new LoginFilter();
+        loginFilter.setAuthenticationSuccessHandler((request, response, authentication) -> {
+                    response.setContentType("application/json;charset=utf-8");
+                    PrintWriter out = response.getWriter();
+                    User user = (User) authentication.getPrincipal();
+                    user.setPassword(null);
+                    CommonVO ok = CommonVO.ok("登录成功!", user);
+                    String s = new ObjectMapper().writeValueAsString(ok);
+                    out.write(s);
+                    out.flush();
+                    out.close();
+                }
+        );
+        loginFilter.setAuthenticationFailureHandler((request, response, exception) -> {
+                    response.setContentType("application/json;charset=utf-8");
+                    PrintWriter out = response.getWriter();
+                    CommonVO respBean = CommonVO.error(exception.getMessage());
+                    if (exception instanceof LockedException) {
+                        respBean.setMsg("账户被锁定，请联系管理员!");
+                    } else if (exception instanceof CredentialsExpiredException) {
+                        respBean.setMsg("密码过期，请联系管理员!");
+                    } else if (exception instanceof AccountExpiredException) {
+                        respBean.setMsg("账户过期，请联系管理员!");
+                    } else if (exception instanceof DisabledException) {
+                        respBean.setMsg("账户被禁用，请联系管理员!");
+                    } else if (exception instanceof BadCredentialsException) {
+                        respBean.setMsg("用户名或者密码输入错误，请重新输入!");
+                    }
+                    out.write(new ObjectMapper().writeValueAsString(respBean));
+                    out.flush();
+                    out.close();
+                }
+        );
+        loginFilter.setAuthenticationManager(authenticationManagerBean());
+        loginFilter.setFilterProcessesUrl("/doLogin");
+        ConcurrentSessionControlAuthenticationStrategy sessionStrategy = new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry());
+        sessionStrategy.setMaximumSessions(1);
+        loginFilter.setSessionAuthenticationStrategy(sessionStrategy);
+        return loginFilter;
+    }
+
+    @Bean
+    SessionRegistryImpl sessionRegistry() {
+        return new SessionRegistryImpl();
+>>>>>>> Stashed changes
     }
 
     @Override
@@ -61,6 +124,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     @Override
+<<<<<<< Updated upstream
                     public <O extends FilterSecurityInterceptor> O postProcess(O o) {
                         o.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource);
                         o.setAccessDecisionManager(urlAccessDecisionManager);
@@ -97,6 +161,51 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 out.close();
             }
         }).and().logout().permitAll().and().csrf().disable().exceptionHandling().accessDeniedHandler(authenticationAccessDeniedHandler);
+=======
+                    public <O extends FilterSecurityInterceptor> O postProcess(O object) {
+                        object.setAccessDecisionManager(customUrlDecisionManager);
+                        object.setSecurityMetadataSource(customFilterInvocationSecurityMetadataSource);
+                        return object;
+                    }
+                })
+                .and()
+                .logout()
+                .logoutSuccessHandler((req, resp, authentication) -> {
+                            resp.setContentType("application/json;charset=utf-8");
+                            PrintWriter out = resp.getWriter();
+                            out.write(new ObjectMapper().writeValueAsString(CommonVO.ok("注销成功!")));
+                            out.flush();
+                            out.close();
+                        }
+                )
+                .permitAll()
+                .and()
+                .csrf().disable().exceptionHandling()
+                //没有认证时，在这里处理结果，不要重定向
+                .authenticationEntryPoint((req, resp, authException) -> {
+                            resp.setContentType("application/json;charset=utf-8");
+                            resp.setStatus(401);
+                            PrintWriter out = resp.getWriter();
+                            CommonVO commonVO = CommonVO.error("访问失败!");
+                            if (authException instanceof InsufficientAuthenticationException) {
+                                commonVO.setMsg("请求失败，请联系管理员!");
+                            }
+                            out.write(new ObjectMapper().writeValueAsString(commonVO));
+                            out.flush();
+                            out.close();
+                        }
+                );
+        http.addFilterAt(new ConcurrentSessionFilter(sessionRegistry(), event -> {
+            HttpServletResponse resp = event.getResponse();
+            resp.setContentType("application/json;charset=utf-8");
+            resp.setStatus(401);
+            PrintWriter out = resp.getWriter();
+            out.write(new ObjectMapper().writeValueAsString(CommonVO.error("您已在另一台设备登录，本次登录已下线!")));
+            out.flush();
+            out.close();
+        }), ConcurrentSessionFilter.class);
+        http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
+>>>>>>> Stashed changes
     }
 
     @Bean
