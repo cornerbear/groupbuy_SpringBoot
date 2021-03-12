@@ -3,11 +3,11 @@
 <mapper namespace="com.xj.groupbuy.background.user.mapper.MenuMapper">
 
     <resultMap id="BaseResultMap" type="com.xj.groupbuy.background.user.entity.Menu" >
-        <id column="id" property="menuId" jdbcType="INTEGER" />
-        <result column="menu_url" property="menuUrl" jdbcType="VARCHAR" />
-        <result column="menu_path" property="menuPath" jdbcType="VARCHAR" />
-        <result column="menu_component" property="menuComponent" jdbcType="VARCHAR" />
-        <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="path" property="path" jdbcType="VARCHAR" />
+        <result column="component" property="component" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="icon_Cls" property="iconCls" jdbcType="VARCHAR" />
         <result column="parent_Id" property="parentId" jdbcType="INTEGER" />
 <!--        <association property="meta" javaType="org.javaboy.vhr.model.Meta">-->
@@ -18,9 +18,9 @@
 
     <resultMap id="MenuWithRole" type="com.xj.groupbuy.background.user.entity.Menu" extends="BaseResultMap">
         <collection property="roles" ofType="com.xj.groupbuy.background.user.entity.Role">
-            <id column="role_id" property="role_id"/>
+            <id column="id" property="id"/>
             <result column="name" property="name"/>
-            <result column="nameZh" property="nameZh"/>
+            <result column="nameZh" property="namezh"/>
         </collection>
     </resultMap>
     

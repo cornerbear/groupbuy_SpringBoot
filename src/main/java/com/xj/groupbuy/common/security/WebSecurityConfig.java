@@ -1,12 +1,13 @@
 package com.xj.groupbuy.common.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xj.groupbuy.background.user.entity.User;
 import com.xj.groupbuy.background.user.service.IUserService;
 import com.xj.groupbuy.common.util.UserUtil;
+import com.xj.groupbuy.common.vo.CommonVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.*;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,13 +16,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.session.ConcurrentSessionFilter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -40,13 +46,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     IUserService userService;
     @Autowired
-<<<<<<< Updated upstream
-    UrlFilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource;
-    @Autowired
-    UrlAccessDecisionManager urlAccessDecisionManager;
-    @Autowired
-    AuthenticationAccessDeniedHandler authenticationAccessDeniedHandler;
-=======
     CustomFilterInvocationSecurityMetadataSource customFilterInvocationSecurityMetadataSource;
     @Autowired
     CustomUrlDecisionManager customUrlDecisionManager;
@@ -55,18 +54,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
->>>>>>> Stashed changes
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userService);
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-<<<<<<< Updated upstream
-        web.ignoring().antMatchers("/index.html", "/static/**");
-=======
         web.ignoring().antMatchers("/css/**", "/js/**", "/index.html", "/img/**", "/fonts/**", "/favicon.ico", "/verifyCode");
     }
 
@@ -88,19 +83,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         loginFilter.setAuthenticationFailureHandler((request, response, exception) -> {
                     response.setContentType("application/json;charset=utf-8");
                     PrintWriter out = response.getWriter();
-                    CommonVO respBean = CommonVO.error(exception.getMessage());
+                    CommonVO commonVO = CommonVO.error(exception.getMessage());
                     if (exception instanceof LockedException) {
-                        respBean.setMsg("账户被锁定，请联系管理员!");
+                        commonVO.setMsg("账户被锁定，请联系管理员!");
                     } else if (exception instanceof CredentialsExpiredException) {
-                        respBean.setMsg("密码过期，请联系管理员!");
+                        commonVO.setMsg("密码过期，请联系管理员!");
                     } else if (exception instanceof AccountExpiredException) {
-                        respBean.setMsg("账户过期，请联系管理员!");
+                        commonVO.setMsg("账户过期，请联系管理员!");
                     } else if (exception instanceof DisabledException) {
-                        respBean.setMsg("账户被禁用，请联系管理员!");
+                        commonVO.setMsg("账户被禁用，请联系管理员!");
                     } else if (exception instanceof BadCredentialsException) {
-                        respBean.setMsg("用户名或者密码输入错误，请重新输入!");
+                        commonVO.setMsg("用户名或者密码输入错误，请重新输入!");
                     }
-                    out.write(new ObjectMapper().writeValueAsString(respBean));
+                    out.write(new ObjectMapper().writeValueAsString(commonVO));
                     out.flush();
                     out.close();
                 }
@@ -116,7 +111,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     SessionRegistryImpl sessionRegistry() {
         return new SessionRegistryImpl();
->>>>>>> Stashed changes
     }
 
     @Override
@@ -124,44 +118,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     @Override
-<<<<<<< Updated upstream
-                    public <O extends FilterSecurityInterceptor> O postProcess(O o) {
-                        o.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource);
-                        o.setAccessDecisionManager(urlAccessDecisionManager);
-                        return o;
-                    }
-                }).and().formLogin().loginPage("/login_p").loginProcessingUrl("/login").usernameParameter("username").passwordParameter("password").permitAll().failureHandler(new AuthenticationFailureHandler() {
-            @Override
-            public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-                httpServletResponse.setContentType("application/json;charset=utf-8");
-                PrintWriter out = httpServletResponse.getWriter();
-                StringBuffer sb = new StringBuffer();
-                sb.append("{\"status\":\"error\",\"msg\":\"");
-                if (e instanceof UsernameNotFoundException || e instanceof BadCredentialsException) {
-                    sb.append("用户名或密码输入错误，登录失败!");
-                } else if (e instanceof DisabledException) {
-                    sb.append("账户被禁用，登录失败，请联系管理员!");
-                } else {
-                    sb.append("登录失败!");
-                }
-                sb.append("\"}");
-                out.write(sb.toString());
-                out.flush();
-                out.close();
-            }
-        }).successHandler(new AuthenticationSuccessHandler() {
-            @Override
-            public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-                httpServletResponse.setContentType("application/json;charset=utf-8");
-                PrintWriter out = httpServletResponse.getWriter();
-                ObjectMapper objectMapper = new ObjectMapper();
-                String s = "{\"status\":\"success\",\"msg\":" + objectMapper.writeValueAsString(UserUtil.getCurrentUser()) + "}";
-                out.write(s);
-                out.flush();
-                out.close();
-            }
-        }).and().logout().permitAll().and().csrf().disable().exceptionHandling().accessDeniedHandler(authenticationAccessDeniedHandler);
-=======
                     public <O extends FilterSecurityInterceptor> O postProcess(O object) {
                         object.setAccessDecisionManager(customUrlDecisionManager);
                         object.setSecurityMetadataSource(customFilterInvocationSecurityMetadataSource);
@@ -205,7 +161,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             out.close();
         }), ConcurrentSessionFilter.class);
         http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
->>>>>>> Stashed changes
     }
 
     @Bean

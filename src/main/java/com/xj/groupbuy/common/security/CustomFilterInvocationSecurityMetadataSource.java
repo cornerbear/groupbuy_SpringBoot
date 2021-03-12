@@ -20,47 +20,27 @@ import java.util.List;
  * 该类的主要功能就是通过当前的请求地址，获取该地址需要的用户角色
  */
 @Component
-<<<<<<< Updated upstream:src/main/java/com/xj/groupbuy/common/security/UrlFilterInvocationSecurityMetadataSource.java
-public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
-=======
 public class CustomFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-    @Autowired
-    IMenuService menuService;
->>>>>>> Stashed changes:src/main/java/com/xj/groupbuy/common/security/CustomFilterInvocationSecurityMetadataSource.java
-    
     @Autowired
     private IMenuService menuService;
 
     AntPathMatcher antPathMatcher = new AntPathMatcher();
-    
+
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-        //获取请求地址
         String requestUrl = ((FilterInvocation) object).getRequestUrl();
-<<<<<<< Updated upstream:src/main/java/com/xj/groupbuy/common/security/UrlFilterInvocationSecurityMetadataSource.java
-        if ("/login_p".equals(requestUrl)) {
-            return null;
-        }
-        List<Menu> allMenu = menuService.list();
-        for (Menu menu : allMenu) {
-            if (antPathMatcher.match(menu.getMenuUrl(), requestUrl)&&menu.getRoles().size()>0) {
-=======
-//        List<Menu> menus = menuService.list();
         List<Menu> menus = menuService.getAllMenusWithRole();
         for (Menu menu : menus) {
             if (antPathMatcher.match(menu.getUrl(), requestUrl)) {
->>>>>>> Stashed changes:src/main/java/com/xj/groupbuy/common/security/CustomFilterInvocationSecurityMetadataSource.java
                 List<Role> roles = menu.getRoles();
-                int size = roles.size();
-                String[] values = new String[size];
-                for (int i = 0; i < size; i++) {
-                    values[i] = roles.get(i).getName();
+                String[] str = new String[roles.size()];
+                for (int i = 0; i < roles.size(); i++) {
+                    str[i] = roles.get(i).getName();
                 }
-                return SecurityConfig.createList(values);
+                return SecurityConfig.createList(str);
             }
         }
-        //没有匹配上的资源，都是登录访问
         return SecurityConfig.createList("ROLE_LOGIN");
     }
 
@@ -71,6 +51,6 @@ public class CustomFilterInvocationSecurityMetadataSource implements FilterInvoc
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return FilterInvocation.class.isAssignableFrom(clazz);
+        return true;
     }
 }

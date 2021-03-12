@@ -17,15 +17,11 @@ import java.io.IOException;
  */
 @RestController
 public class LoginController {
-
-<<<<<<< Updated upstream
-=======
+    
     @GetMapping("/login")
     public CommonVO login() {
         return CommonVO.error("尚未登录，请登录!");
     }
-    
->>>>>>> Stashed changes
 
     @GetMapping("/verifyCode")
     public void verifyCode(HttpServletRequest request, HttpServletResponse resp) throws IOException {
