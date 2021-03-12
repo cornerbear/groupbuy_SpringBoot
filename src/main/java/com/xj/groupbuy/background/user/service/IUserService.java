@@ -2,6 +2,7 @@ package com.xj.groupbuy.background.user.service;
 
 import com.xj.groupbuy.background.user.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * <p>
@@ -11,6 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author zhangxiaojian
  * @since 2021-03-07
  */
-public interface IUserService extends IService<User> {
+public interface IUserService extends IService<User>, UserDetailsService {
 
 }
