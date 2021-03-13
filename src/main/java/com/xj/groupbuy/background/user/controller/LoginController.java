@@ -2,8 +2,8 @@ package com.xj.groupbuy.background.user.controller;
 
 import com.xj.groupbuy.common.util.VerificationCode;
 import com.xj.groupbuy.common.vo.CommonVO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
