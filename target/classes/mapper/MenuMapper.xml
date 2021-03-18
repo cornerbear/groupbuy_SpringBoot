@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xj.groupbuy.mapper.MenuMapper">
+
+    <resultMap id="BaseResultMap" type="com.xj.groupbuy.entity.Menu" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="path" property="path" jdbcType="VARCHAR" />
+        <result column="component" property="component" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="icon_Cls" property="iconCls" jdbcType="VARCHAR" />
+        <result column="parent_Id" property="parentId" jdbcType="INTEGER" />
+<!--        <association property="meta" javaType="org.javaboy.vhr.model.Meta">-->
+<!--            <result column="keepAlive" property="keepAlive" jdbcType="BIT" />-->
+<!--            <result column="requireAuth" property="requireAuth" jdbcType="BIT" />-->
+<!--        </association>-->
+    </resultMap>
+
+    <resultMap id="MenuWithRole" type="com.xj.groupbuy.entity.Menu" extends="BaseResultMap">
+        <collection property="roles" ofType="com.xj.groupbuy.entity.Role">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="nameZh" property="namezh"/>
+        </collection>
+    </resultMap>
+    
+    <select id="getAllMenusWithRole" resultMap="MenuWithRole">
+        select 
+               m.*,r.`id` as rid,
+               r.`name` as rname,
+               r.`nameZh` as rnameZh 
+        from menu m,menu_role mr,role r 
+        where 
+              m.`id`=mr.`menu_id` 
+          and 
+              mr.`role_id`=r.`id` 
+        order by m.`id`
+    </select>
+</mapper>

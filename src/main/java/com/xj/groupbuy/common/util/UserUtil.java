@@ -1,6 +1,6 @@
 package com.xj.groupbuy.common.util;
 
-import com.xj.groupbuy.background.user.entity.User;
+import com.xj.groupbuy.entity.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**

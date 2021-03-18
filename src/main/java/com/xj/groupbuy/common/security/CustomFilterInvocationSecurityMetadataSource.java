@@ -1,8 +1,8 @@
 package com.xj.groupbuy.common.security;
 
-import com.xj.groupbuy.background.user.entity.Menu;
-import com.xj.groupbuy.background.user.entity.Role;
-import com.xj.groupbuy.background.user.service.IMenuService;
+import com.xj.groupbuy.entity.Menu;
+import com.xj.groupbuy.entity.Role;
+import com.xj.groupbuy.service.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;

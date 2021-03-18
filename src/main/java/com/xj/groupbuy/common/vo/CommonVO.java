@@ -1,6 +1,5 @@
 package com.xj.groupbuy.common.vo;
 
-import com.xj.groupbuy.background.user.entity.User;
 import lombok.Data;
 
 @Data

@@ -1,7 +1,7 @@
 package com.xj.groupbuy.common.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.xj.groupbuy.background.user.entity.User;
+import com.xj.groupbuy.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationServiceException;
