@@ -33,8 +33,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         queryWrapper.eq("username",username);
         User user = userMapper.selectOne(queryWrapper);
         if (user == null) {
-            throw new UsernameNotFoundException("用户名不对");
+            throw new UsernameNotFoundException("用户名不存在");
         }
+        user.setRoles(userMapper.getUserRolesById(user.getUserId()));
         return user;
     }
 }
