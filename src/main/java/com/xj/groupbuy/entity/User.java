@@ -48,8 +48,8 @@ public class User implements Serializable, UserDetails {
     @TableField("USER_ADDRESS")
     private String userAddress;
 
-    @TableField("ENABLE")
-    private String enable;
+    @TableField("ENABLED")
+    private String enabled;
 
     @TableField(exist = false)
     private List<Role> roles;

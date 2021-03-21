@@ -39,17 +39,20 @@ public class Menu implements Serializable {
     @TableField("NAME")
     private String name;
 
-    @TableField("KEEP_ALIVE")
-    private String keepAlive;
-
-    @TableField("REQUIRE_AUTH")
-    private String requireAuth;
-
-    @TableField("PARENT_ID")
-    private Integer parentId;
-
     @TableField("ICON_CLS")
     private String iconCls;
+
+    @TableField("PARENT_ID")
+    private String parentId;
+
+    @TableField("ENABLED")
+    private Boolean enabled;
+
+    @TableField(exist = false)
+    private Meta meta;
+    
+    @TableField(exist = false)
+    private List<Menu> children;
 
     @TableField(exist = false)
     private List<Role> roles;

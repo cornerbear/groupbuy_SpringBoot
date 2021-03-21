@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  * Author : zhangxiaojian
  * Date : 2021/3/2
  */
-@Component
+//@Component
 public class RedisUrlCountInterceptor implements HandlerInterceptor {
 
     @Autowired

@@ -10,10 +10,27 @@
         <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="icon_Cls" property="iconCls" jdbcType="VARCHAR" />
         <result column="parent_Id" property="parentId" jdbcType="INTEGER" />
-<!--        <association property="meta" javaType="org.javaboy.vhr.model.Meta">-->
-<!--            <result column="keepAlive" property="keepAlive" jdbcType="BIT" />-->
-<!--            <result column="requireAuth" property="requireAuth" jdbcType="BIT" />-->
-<!--        </association>-->
+        <result column="enabled2" property="enabled" jdbcType="BIT" />
+        <association property="meta" javaType="com.xj.groupbuy.entity.Meta">
+            <result column="keepAlive" property="keepAlive" jdbcType="BIT" />
+            <result column="requireAuth" property="requireAuth" jdbcType="BIT" />
+        </association>
+    </resultMap>
+    <resultMap id="Menus2" type="com.xj.groupbuy.entity.Menu" extends="BaseResultMap">
+        <collection property="children" ofType="com.xj.groupbuy.entity.Menu">
+            <id column="id2" property="id" jdbcType="INTEGER" />
+            <result column="url2" property="url" jdbcType="VARCHAR" />
+            <result column="path2" property="path" jdbcType="VARCHAR" />
+            <result column="component2" property="component" jdbcType="VARCHAR" />
+            <result column="name2" property="name" jdbcType="VARCHAR" />
+            <result column="iconCls2" property="iconCls" jdbcType="VARCHAR" />
+            <result column="parentId2" property="parentId" jdbcType="INTEGER" />
+            <result column="enabled2" property="enabled" jdbcType="BIT" />
+            <association property="meta" javaType="com.xj.groupbuy.entity.Meta">
+                <result column="keepAlive2" property="keepAlive" jdbcType="BIT" />
+                <result column="requireAuth2" property="requireAuth" jdbcType="BIT" />
+            </association>
+        </collection>
     </resultMap>
 
     <resultMap id="MenuWithRole" type="com.xj.groupbuy.entity.Menu" extends="BaseResultMap">
@@ -38,5 +55,25 @@
           and 
               mr.`role_id`=r.`role_id` 
         order by m.`id`
+    </select>
+
+
+    <select id="getMenusByUserId" resultMap="Menus2">
+        select 
+               m.*
+        from 
+             menu m,
+             user_role ur,
+             menu_role mr 
+        where 
+            ur.`user_id`=#{userId} 
+          and
+            ur.`role_id`=mr.`role_id` 
+          and 
+            mr.`menu_id`=m.`id` 
+          and
+            m.`enabled`= true 
+        order by 
+                 m.`id`
     </select>
 </mapper>
