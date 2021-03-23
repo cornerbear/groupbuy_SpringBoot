@@ -40,6 +40,20 @@
             <result column="rnameZh" property="namezh"/>
         </collection>
     </resultMap>
+
+
+    <resultMap id="MenuWithChildren" type="com.xj.groupbuy.entity.Menu" extends="BaseResultMap">
+        <id column="id1" property="id"/>
+        <result column="name1" property="name"/>
+        <collection property="children" ofType="com.xj.groupbuy.entity.Menu">
+            <id column="id2" property="id"/>
+            <result column="name2" property="name"/>
+            <collection property="children" ofType="com.xj.groupbuy.entity.Menu">
+                <id column="id3" property="id"/>
+                <result column="name3" property="name"/>
+            </collection>
+        </collection>
+    </resultMap>
     
     <select id="getAllMenusWithRole" resultMap="MenuWithRole">
         select 
@@ -56,7 +70,6 @@
               mr.`role_id`=r.`role_id` 
         order by m.`id`
     </select>
-
 
     <select id="getMenusByUserId" resultMap="Menus2">
         select 
@@ -75,5 +88,22 @@
             m.`enabled`= true 
         order by 
                  m.`id`
+    </select>
+
+    <select id="getAllMenus" resultMap="MenuWithChildren">
+        select 
+               m1.`id` as id1,m1.`name` as name1,
+               m2.`id` as id2,m2.`name` as name2 
+        from menu m1,menu m2
+        where 
+              m1.`id`=m2.`parent_id` 
+          and 
+              m2.`enabled`= true 
+        order by m1.`id`,m2.`id`
+    </select>
+
+
+    <select id="getMenuIdsByRoleId" resultType="java.lang.Integer">
+        select menu_id from menu_role where role_id=#{roleId};
     </select>
 </mapper>

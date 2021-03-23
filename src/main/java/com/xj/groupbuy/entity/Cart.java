@@ -1,6 +1,8 @@
 package com.xj.groupbuy.entity;
 
 import java.math.BigDecimal;
+
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
@@ -21,7 +23,7 @@ public class Cart implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId("CART_ID")
+    @TableId(value = "CART_ID",type = IdType.ASSIGN_ID)
     private String cartId;
 
     @TableField("USER_ID")

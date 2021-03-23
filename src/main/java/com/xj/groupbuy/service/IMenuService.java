@@ -1,5 +1,8 @@
 package com.xj.groupbuy.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xj.groupbuy.entity.Goods;
 import com.xj.groupbuy.entity.Menu;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -18,4 +21,14 @@ public interface IMenuService extends IService<Menu> {
     List<Menu> getAllMenusWithRole();
 
     List<Menu> getMenusByUserId();
+
+    List<Menu> getAllMenus();
+
+    List<Integer> getMenuIdsByRoleId(Integer roleId);
+
+    IPage<?> menuTable(String parentId, Integer pageNo, Integer pageSize);
+
+    List<Menu> menuTree();
+
+    boolean saveMenu(Menu menu);
 }

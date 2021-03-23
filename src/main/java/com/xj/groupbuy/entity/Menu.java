@@ -1,13 +1,17 @@
 package com.xj.groupbuy.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 /**
  * <p>
@@ -20,11 +24,11 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("menu")
-public class Menu implements Serializable {
+public class Menu implements Serializable,TreeEntity<Menu> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId("ID")
+    @TableId(value = "ID",type = IdType.ASSIGN_ID)
     private String id;
 
     @TableField("URL")
@@ -47,6 +51,9 @@ public class Menu implements Serializable {
 
     @TableField("ENABLED")
     private Boolean enabled;
+    
+    @TableField("SORT")
+    private Integer sort;
 
     @TableField(exist = false)
     private Meta meta;
@@ -56,6 +63,28 @@ public class Menu implements Serializable {
 
     @TableField(exist = false)
     private List<Role> roles;
-    
 
+
+    @Override
+    @JsonIgnore
+    public String getTreeId() {
+        return this.id;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getTreeParentId() {
+        return this.parentId;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isTreeEnabled() {
+        return this.enabled;
+    }
+
+    @Override
+    public void setTreeChildren(List<Menu> children) {
+        this.children = children;
+    }
 }

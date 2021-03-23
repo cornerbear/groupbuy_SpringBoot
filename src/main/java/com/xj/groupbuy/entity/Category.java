@@ -1,5 +1,6 @@
 package com.xj.groupbuy.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
@@ -24,7 +25,7 @@ public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId("CAT_ID")
+    @TableId(value = "CAT_ID",type = IdType.ASSIGN_ID)
     private String catId;
 
     @TableField("CAT_NAME")
