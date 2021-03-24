@@ -11,11 +11,11 @@ import java.util.List;
  */
 public class TreeUtil{
 
-    public static <E extends TreeEntity<E>> List<E> getTreeList(String topId, List<E> entityList) {
+    public static <E extends TreeEntity<E>> List<E> getTreeList(Integer topId, List<E> entityList) {
         List<E> resultList=new ArrayList<>();
 
         //获取顶层元素集合
-        String parentId;
+        Integer parentId;
         for (E entity : entityList) {
             
             if(entity.isTreeEnabled()){
@@ -34,9 +34,9 @@ public class TreeUtil{
         return resultList;
     }
 
-    private  static  <E extends TreeEntity<E>>  List<E> getSubList(String id, List<E> entityList) {
+    private  static  <E extends TreeEntity<E>>  List<E> getSubList(Integer id, List<E> entityList) {
         List<E> childList=new ArrayList<>();
-        String parentId;
+        Integer parentId;
 
         //子集的直接子对象
         for (E entity : entityList) {

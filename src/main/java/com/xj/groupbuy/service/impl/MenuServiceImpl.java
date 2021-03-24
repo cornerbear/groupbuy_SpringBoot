@@ -1,10 +1,13 @@
 package com.xj.groupbuy.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.segments.MergeSegments;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xj.groupbuy.common.util.TreeUtil;
 import com.xj.groupbuy.common.util.UserUtil;
+import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.Category;
 import com.xj.groupbuy.entity.Goods;
 import com.xj.groupbuy.entity.Menu;
@@ -43,26 +46,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     @Override
     public List<Menu> getMenusByUserId() {
         List<Menu> menusByUserId = menuMapper.getMenusByUserId(UserUtil.getCurrentUser().getUserId());
-        
-        List<Menu> res = new CopyOnWriteArrayList<>();
-        List<Menu> sons = new CopyOnWriteArrayList<>();
-        for (Menu menu : menusByUserId) {
-            if (menu.getParentId().equals("0")) {
-                res.add(menu);
-            } else {
-                sons.add(menu);
-            }
-        }
-        for (Menu parent : res) {
-            recursionMenu(parent,sons);
-        }
-        
-        return res;
+
+        return TreeUtil.getTreeList(0, menusByUserId);
+
     }
 
     @Override
-    public List<Menu> getAllMenus() {
-        return menuMapper.getAllMenus();
+    public List<Menu> getAllMenusIdAndName() {
+        return menuMapper.getAllMenusIdAndName();
     }
 
     @Override
@@ -85,7 +76,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     public List<Menu> menuTree() {
 
         List<Menu> menus = menuMapper.selectList(null);
-        List<Menu> treeList = TreeUtil.getTreeList("0", menus);
+        List<Menu> treeList = TreeUtil.getTreeList(0, menus);
         return treeList;
     }
 
@@ -95,17 +86,15 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         return this.save(menu);
     }
 
-    private void recursionMenu(Menu parent, List<Menu> sons) {
-        if(sons.size() == 0) return ;
-        String menuId = parent.getId();
-        for (Menu son : sons) {
-            if (son.getParentId().equals(menuId)) {
-                if(parent.getChildren() == null)
-                    parent.setChildren(new CopyOnWriteArrayList<>());
-                parent.getChildren().add(son);
-                sons.remove(son);
-                recursionMenu(son,sons);
-            }
+    @Override
+    public CommonVO deleteMenu(Integer id) {
+        Integer sonCount = menuMapper.selectCount(new QueryWrapper<Menu>().eq("parentId", id));
+        if(sonCount >= 0){
+            return new CommonVO(false,"尚存在子菜单，禁止删除");
+        } else {
+            menuMapper.deleteById(id);
         }
+        return null;
     }
+
 }

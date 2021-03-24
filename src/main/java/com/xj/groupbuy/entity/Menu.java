@@ -28,8 +28,8 @@ public class Menu implements Serializable,TreeEntity<Menu> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "ID",type = IdType.ASSIGN_ID)
-    private String id;
+    @TableId(value = "ID",type = IdType.AUTO)
+    private Integer id;
 
     @TableField("URL")
     private String url;
@@ -47,7 +47,7 @@ public class Menu implements Serializable,TreeEntity<Menu> {
     private String iconCls;
 
     @TableField("PARENT_ID")
-    private String parentId;
+    private Integer parentId;
 
     @TableField("ENABLED")
     private Boolean enabled;
@@ -67,13 +67,13 @@ public class Menu implements Serializable,TreeEntity<Menu> {
 
     @Override
     @JsonIgnore
-    public String getTreeId() {
+    public Integer getTreeId() {
         return this.id;
     }
 
     @Override
     @JsonIgnore
-    public String getTreeParentId() {
+    public Integer getTreeParentId() {
         return this.parentId;
     }
 

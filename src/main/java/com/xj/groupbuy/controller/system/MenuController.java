@@ -20,40 +20,68 @@ import java.util.List;
  * @since 2021-03-11
  */
 @RestController
-@RequestMapping("system")
+@RequestMapping("system/menu")
 public class MenuController {
 
 
     @Autowired
     IMenuService menuService;
+
+    @DeleteMapping
+    public CommonVO deleteMenu(Integer id){
+        return menuService.deleteMenu(id);
+    }
     
-    @PostMapping("menu")
+    /**
+     * 保存菜单
+     */
+    @PostMapping
     public CommonVO saveMenu(@RequestBody Menu menu){
         boolean save = menuService.saveMenu(menu);
         return new CommonVO(save,save?"保存成功":"保存失败");
     }
-    
-    @GetMapping("menu")
+
+    /**
+     * 系统初始化左侧菜单
+     * @return 树形菜单
+     */
+    @GetMapping
     public List<Menu> getMenusByUserId() {
         return menuService.getMenusByUserId();
     }
 
-    @GetMapping("menus")
-    public List<Menu> getAllMenus() {
-        return menuService.getAllMenus();
+    /**
+     * 获取所有菜单的id和name 
+     * @return 用于菜单权限管理
+     */
+    @GetMapping("IdAndName")
+    public List<Menu> getAllMenusIdAndName() {
+        return menuService.getAllMenusIdAndName();
     }
-    
-    @GetMapping("menuTable")
+
+    /**
+     * 获取菜单表格
+     * @return 用于菜单管理的表格展示
+     */
+    @GetMapping("table")
     public CommonVO menuTable(String parentId,Integer pageNo,Integer pageSize){
         return new CommonVO(true,menuService.menuTable(parentId,pageNo,pageSize));
     }
 
-    @GetMapping("menuTree")
+    /**
+     * 获取菜单树
+     * @return 用于菜单管理的树状展示
+     */
+    @GetMapping("tree")
     public CommonVO menuTree(){
         return new CommonVO(true,menuService.menuTree());
     }
-    
-    @GetMapping("menuIds/{roleId}")
+
+    /**
+     * 获取某个角色所对应的菜单 ID
+     * @return 用于菜单权限管理的树状选择
+     */
+    @GetMapping("ids/{roleId}")
     public List<Integer> getMenuIdsByRoleId(@PathVariable Integer roleId) {
         return menuService.getMenuIdsByRoleId(roleId);
     }

@@ -10,7 +10,7 @@
         <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="icon_Cls" property="iconCls" jdbcType="VARCHAR" />
         <result column="parent_Id" property="parentId" jdbcType="INTEGER" />
-        <result column="enabled2" property="enabled" jdbcType="BIT" />
+        <result column="enabled" property="enabled" jdbcType="BIT" />
         <association property="meta" javaType="com.xj.groupbuy.entity.Meta">
             <result column="keepAlive" property="keepAlive" jdbcType="BIT" />
             <result column="requireAuth" property="requireAuth" jdbcType="BIT" />
@@ -71,7 +71,7 @@
         order by m.`id`
     </select>
 
-    <select id="getMenusByUserId" resultMap="Menus2">
+    <select id="getMenusByUserId" resultMap="BaseResultMap">
         select 
                m.*
         from 
@@ -84,13 +84,11 @@
             ur.`role_id`=mr.`role_id` 
           and 
             mr.`menu_id`=m.`id` 
-          and
-            m.`enabled`= true 
         order by 
                  m.`id`
     </select>
 
-    <select id="getAllMenus" resultMap="MenuWithChildren">
+    <select id="getAllMenusIdAndName" resultMap="MenuWithChildren">
         select 
                m1.`id` as id1,m1.`name` as name1,
                m2.`id` as id2,m2.`name` as name2 
@@ -104,6 +102,12 @@
 
 
     <select id="getMenuIdsByRoleId" resultType="java.lang.Integer">
-        select menu_id from menu_role where role_id=#{roleId};
+        select 
+               mr.menu_id 
+        from menu_role mr,menu m 
+        where 
+              mr.menu_id = m.id 
+          and role_id=#{roleId} 
+          and m.parent_id != 0;
     </select>
 </mapper>

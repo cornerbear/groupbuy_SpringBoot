@@ -7,8 +7,8 @@ import java.util.List;
  * Date : 2021/3/23
  */
 public interface TreeEntity<E> {
-    String getTreeId();
-    String getTreeParentId();
+    Integer getTreeId();
+    Integer getTreeParentId();
     default boolean isTreeEnabled(){
         return true;
     }
