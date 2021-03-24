@@ -69,7 +69,6 @@ public class CodeGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"));
-        String temp = scanner("前台还是后台？0前台 1后台");
         pc.setParent("com.xj.groupbuy");
         
         mpg.setPackageInfo(pc);

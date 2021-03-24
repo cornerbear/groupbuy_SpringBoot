@@ -11,7 +11,9 @@ import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.Category;
 import com.xj.groupbuy.entity.Goods;
 import com.xj.groupbuy.entity.Menu;
+import com.xj.groupbuy.entity.MenuRole;
 import com.xj.groupbuy.mapper.MenuMapper;
+import com.xj.groupbuy.mapper.MenuRoleMapper;
 import com.xj.groupbuy.service.IMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 
     @Autowired
     private MenuMapper menuMapper;
+    @Autowired
+    private MenuRoleMapper menuRoleMapper;
     
     @Override
     public List<Menu> getAllMenusWithRole() {
@@ -81,20 +85,20 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-    @Transactional
     public boolean saveMenu(Menu menu) {
         return this.save(menu);
     }
 
     @Override
     public CommonVO deleteMenu(Integer id) {
-        Integer sonCount = menuMapper.selectCount(new QueryWrapper<Menu>().eq("parentId", id));
-        if(sonCount >= 0){
+        Integer sonCount = menuMapper.selectCount(new QueryWrapper<Menu>().eq("parent_id", id));
+        if(sonCount > 0){
             return new CommonVO(false,"尚存在子菜单，禁止删除");
         } else {
             menuMapper.deleteById(id);
+            menuRoleMapper.delete(new QueryWrapper<MenuRole>().eq("menu_id",id));
+            return new CommonVO(true,"删除成功");
         }
-        return null;
     }
 
 }
