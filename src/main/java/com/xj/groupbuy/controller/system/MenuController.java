@@ -40,12 +40,21 @@ public class MenuController {
         boolean save = menuService.saveMenu(menu);
         return new CommonVO(save,save?"保存成功":"保存失败");
     }
+    @GetMapping("{id}")
+    public CommonVO getMenu(@PathVariable Integer id){
+        return new CommonVO(true,menuService.getById(id));  
+    }
+    @PutMapping
+    public CommonVO updateMenu(@RequestBody Menu menu){
+        boolean update = menuService.updateById(menu);
+        return new CommonVO(update,update?"修改成功":"修改失败");
+    }
 
     /**
      * 系统初始化左侧菜单
      * @return 树形菜单
      */
-    @GetMapping
+    @GetMapping("initLeftMenu")
     public List<Menu> getMenusByUserId() {
         return menuService.getMenusByUserId();
     }
@@ -75,6 +84,15 @@ public class MenuController {
     @GetMapping("tree")
     public CommonVO menuTree(){
         return new CommonVO(true,menuService.menuTree());
+    }
+    
+    /**
+     * 获取简单菜单树
+     * @return 用于菜单管理的树状展示
+     */
+    @GetMapping("easyTree")
+    public CommonVO menuEasyTree(){
+        return new CommonVO(true,menuService.getMenuEasyTree());
     }
 
     /**

@@ -34,4 +34,6 @@ public interface IMenuService extends IService<Menu> {
     boolean saveMenu(Menu menu);
 
     CommonVO deleteMenu(Integer id);
+
+    List<Menu> getMenuEasyTree();
 }

@@ -86,7 +86,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 
     @Override
     public boolean saveMenu(Menu menu) {
-        return this.save(menu);
+        boolean save = this.save(menu);
+        Integer id = menu.getId();
+        MenuRole menuRole = new MenuRole();
+        menuRole.setMenuId(id);
+        menuRole.setRoleId(1);
+        menuRoleMapper.insert(menuRole);
+        return save;
     }
 
     @Override
@@ -99,6 +105,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
             menuRoleMapper.delete(new QueryWrapper<MenuRole>().eq("menu_id",id));
             return new CommonVO(true,"删除成功");
         }
+    }
+
+    @Override
+    public List<Menu> getMenuEasyTree() {
+        List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().select("id","name").orderByAsc("id"));
+        List<Menu> treeList = TreeUtil.getTreeList(0, menus);
+        return treeList;
     }
 
 }
