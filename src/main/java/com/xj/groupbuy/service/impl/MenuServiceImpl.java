@@ -71,7 +71,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         Page<Menu> paramPage = new Page<>(pageNo,pageSize);
         QueryWrapper<Menu> wrapper = new QueryWrapper<>();
         if(parentId != null){
-            wrapper.eq("parentId",parentId);
+            wrapper.eq("parent_id",parentId)
+            .or()
+            .eq("id",parentId);
         }
         return this.page(paramPage, wrapper);
     }

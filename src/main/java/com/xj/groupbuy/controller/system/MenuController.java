@@ -46,6 +46,9 @@ public class MenuController {
     }
     @PutMapping
     public CommonVO updateMenu(@RequestBody Menu menu){
+        if(menu.getParentId() == null){
+            menu.setParentId(0);
+        }
         boolean update = menuService.updateById(menu);
         return new CommonVO(update,update?"修改成功":"修改失败");
     }
