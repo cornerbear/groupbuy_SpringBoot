@@ -38,5 +38,3 @@ mybatis-plus:
 #  level: debug
 server:
   port: 8888
-  
-tomcat
