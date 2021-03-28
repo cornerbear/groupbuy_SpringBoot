@@ -3,14 +3,14 @@
 <mapper namespace="com.xj.groupbuy.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="com.xj.groupbuy.entity.User">
-        <id column="user_id" property="userId" jdbcType="INTEGER"/>
-        <result column="username" property="username" jdbcType="CHAR"/>
+        <id column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
         <result column="user_sex" property="userSex" jdbcType="VARCHAR"/>
-        <result column="user_phone" property="userPhone" jdbcType="BIT"/>
+        <result column="user_phone" property="userPhone" jdbcType="VARCHAR"/>
         <result column="user_address" property="userAddress" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="enable" property="enable" jdbcType="VARCHAR"/>
+        <result column="enabled" property="enabled" jdbcType="BIT"/>
     </resultMap>
     <resultMap id="UserWithRoles" type="com.xj.groupbuy.entity.User" extends="BaseResultMap">
         <collection property="roles" ofType="com.xj.groupbuy.entity.Role">

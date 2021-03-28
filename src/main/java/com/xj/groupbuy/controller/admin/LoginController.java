@@ -27,7 +27,7 @@ import java.io.IOException;
  * @since 2021-03-07
  */
 @RestController
-public class UserController {
+public class LoginController {
 
     @Autowired
     private IUserService userService;

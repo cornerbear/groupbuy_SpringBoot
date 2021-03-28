@@ -89,9 +89,6 @@ public class MenuController {
      */
     @GetMapping("table")
     public CommonVO menuTable(String parentId, Integer pageNo, Integer pageSize, HttpServletRequest request){
-        String pageSize1 = request.getParameter("pageSize");
-        request.setAttribute("name","zxj");
-        String name = request.getParameter("name");
         return new CommonVO(true,menuService.menuTable(parentId,pageNo,pageSize));
     }
 

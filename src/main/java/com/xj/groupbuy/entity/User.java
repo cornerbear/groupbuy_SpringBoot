@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,7 +52,8 @@ public class User implements Serializable, UserDetails {
     private String userAddress;
 
     @TableField("ENABLED")
-    private String enabled;
+    @Getter(AccessLevel.NONE)
+    private Boolean enabled;
 
     @TableField(exist = false)
     private List<Role> roles;
@@ -65,6 +69,7 @@ public class User implements Serializable, UserDetails {
 
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         for (Role role : roles) {
