@@ -14,17 +14,30 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.session.ConcurrentSessionFilter;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
@@ -39,9 +52,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     IUserService userService;
     @Autowired
-    CustomFilterInvocationSecurityMetadataSource customFilterInvocationSecurityMetadataSource;
+    MyFilterInvocationSecurityMetadataSource myFilterInvocationSecurityMetadataSource;
     @Autowired
-    CustomUrlDecisionManager customUrlDecisionManager;
+    MyUrlDecisionManager myUrlDecisionManager;
+
+    @Autowired
+    private DataSource dataSource;
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+//        jdbcTokenRepository.setCreateTableOnStartup(true);
+        return jdbcTokenRepository;
+    }
+
+    @Bean
+    public RememberMeServices rememberMeServices() {
+        JdbcTokenRepositoryImpl rememberMeTokenRepository = new JdbcTokenRepositoryImpl();
+        rememberMeTokenRepository.setDataSource(dataSource);
+
+        // 这里也注入了 UserDetailsSerice 实例
+        MyPersistentTokenBasedRememberMeServices rememberMeServices =
+                new MyPersistentTokenBasedRememberMeServices("123", userService, rememberMeTokenRepository);
+//        INTERNAL_SECRET_KEY
+        rememberMeServices.setParameter("rememberMe");
+        return rememberMeServices;
+    }
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -61,6 +98,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     LoginFilter loginFilter() throws Exception {
         LoginFilter loginFilter = new LoginFilter();
+
+        // 用户登录成功后处理方式
         loginFilter.setAuthenticationSuccessHandler((request, response, authentication) -> {
                     response.setContentType("application/json;charset=utf-8");
                     PrintWriter out = response.getWriter();
@@ -73,6 +112,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     out.close();
                 }
         );
+        // 用户登录失败后的处理方式
         loginFilter.setAuthenticationFailureHandler((request, response, exception) -> {
                     response.setContentType("application/json;charset=utf-8");
                     PrintWriter out = response.getWriter();
@@ -98,6 +138,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         ConcurrentSessionControlAuthenticationStrategy sessionStrategy = new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry());
         sessionStrategy.setMaximumSessions(1);
         loginFilter.setSessionAuthenticationStrategy(sessionStrategy);
+        
+        loginFilter.setRememberMeServices(rememberMeServices());
+        
         return loginFilter;
     }
 
@@ -108,42 +151,46 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().authorizeRequests()
-                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
-                    @Override
-                    public <O extends FilterSecurityInterceptor> O postProcess(O object) {
-                        object.setAccessDecisionManager(customUrlDecisionManager);
-                        object.setSecurityMetadataSource(customFilterInvocationSecurityMetadataSource);
-                        return object;
+
+        http.cors();
+
+        // 配置记住我功能
+        http.rememberMe().tokenRepository(persistentTokenRepository()).userDetailsService(userService).rememberMeParameter("rememberMe");
+        
+        http.authorizeRequests().withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+            @Override
+            public <O extends FilterSecurityInterceptor> O postProcess(O object) {
+                object.setAccessDecisionManager(myUrlDecisionManager);
+                object.setSecurityMetadataSource(myFilterInvocationSecurityMetadataSource);
+                return object;
+            }
+        });
+
+        http.logout().logoutSuccessHandler((req, resp, authentication) -> {
+                    resp.setContentType("application/json;charset=utf-8");
+                    PrintWriter out = resp.getWriter();
+                    out.write(new ObjectMapper().writeValueAsString(CommonVO.ok("注销成功!")));
+                    out.flush();
+                    out.close();
+                }
+        ).permitAll();
+
+        http.csrf().disable().exceptionHandling().authenticationEntryPoint((req, resp, authException) -> {
+                    // 处理异常情况：认证失败和权限不足
+                    // 没有认证时，在这里处理结果，不要重定向
+                    resp.setContentType("application/json;charset=utf-8");
+                    resp.setStatus(401);
+                    PrintWriter out = resp.getWriter();
+                    CommonVO commonVO = CommonVO.error("访问失败!");
+                    if (authException instanceof InsufficientAuthenticationException) {
+                        commonVO.setMsg("请求失败，请联系管理员!");
                     }
-                })
-                .and()
-                .logout()
-                .logoutSuccessHandler((req, resp, authentication) -> {
-                            resp.setContentType("application/json;charset=utf-8");
-                            PrintWriter out = resp.getWriter();
-                            out.write(new ObjectMapper().writeValueAsString(CommonVO.ok("注销成功!")));
-                            out.flush();
-                            out.close();
-                        }
-                )
-                .permitAll()
-                .and()
-                .csrf().disable().exceptionHandling()
-                //没有认证时，在这里处理结果，不要重定向
-                .authenticationEntryPoint((req, resp, authException) -> {
-                            resp.setContentType("application/json;charset=utf-8");
-                            resp.setStatus(401);
-                            PrintWriter out = resp.getWriter();
-                            CommonVO commonVO = CommonVO.error("访问失败!");
-                            if (authException instanceof InsufficientAuthenticationException) {
-                                commonVO.setMsg("请求失败，请联系管理员!");
-                            }
-                            out.write(new ObjectMapper().writeValueAsString(commonVO));
-                            out.flush();
-                            out.close();
-                        }
-                );
+                    out.write(new ObjectMapper().writeValueAsString(commonVO));
+                    out.flush();
+                    out.close();
+                }
+        );
+
         http.addFilterAt(new ConcurrentSessionFilter(sessionRegistry(), event -> {
             HttpServletResponse resp = event.getResponse();
             resp.setContentType("application/json;charset=utf-8");
@@ -153,7 +200,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             out.flush();
             out.close();
         }), ConcurrentSessionFilter.class);
+
         http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
+
     }
 
     @Bean

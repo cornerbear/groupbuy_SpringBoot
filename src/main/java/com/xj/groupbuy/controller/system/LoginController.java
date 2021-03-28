@@ -15,15 +15,15 @@ import java.io.IOException;
  * Author : zhangxiaojian
  * Date : 2021/3/11
  */
-@RestController
+//@RestController
 public class LoginController {
     
-    @GetMapping("/login")
+//    @GetMapping/("/login")
     public CommonVO login() {
         return CommonVO.error("尚未登录，请登录!");
     }
 
-    @GetMapping("/verifyCode")
+//    @GetMapping("/verifyCode")
     public void verifyCode(HttpServletRequest request, HttpServletResponse resp) throws IOException {
         VerificationCode code = new VerificationCode();
         BufferedImage image = code.getImage();

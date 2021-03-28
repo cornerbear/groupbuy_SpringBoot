@@ -32,16 +32,21 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         }
         String verify_code = (String) request.getSession().getAttribute("verify_code");
         if (request.getContentType().contains(MediaType.APPLICATION_JSON_VALUE) || request.getContentType().contains(MediaType.APPLICATION_JSON_UTF8_VALUE)) {
-            Map<String, String> loginData = new HashMap<>();
+            Map<String, Object> loginData = new HashMap<>();
             try {
+                String code = request.getParameter("code");
                 loginData = new ObjectMapper().readValue(request.getInputStream(), Map.class);
             } catch (IOException e) {
             }finally {
-                String code = loginData.get("code");
+                String code = loginData.get("code").toString();
                 checkCode(response, code, verify_code);
             }
-            String username = loginData.get(getUsernameParameter());
-            String password = loginData.get(getPasswordParameter());
+            String username = loginData.get(getUsernameParameter()).toString();
+            String password = loginData.get(getPasswordParameter()).toString();
+            Boolean rememberMe = Boolean.valueOf(loginData.get("rememberMe").toString());
+            request.setAttribute("rememberMe",rememberMe);
+            
+            
             if (username == null) {
                 username = "";
             }
@@ -49,8 +54,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 password = "";
             }
             username = username.trim();
+            
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                     username, password);
+            
             setDetails(request, authRequest);
             User principal = new User();
             principal.setUsername(username);

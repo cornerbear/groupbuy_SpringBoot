@@ -18,7 +18,7 @@ import java.util.Iterator;
  * Date : 2021/3/11
  */
 @Component
-public class CustomUrlDecisionManager implements AccessDecisionManager {
+public class MyUrlDecisionManager implements AccessDecisionManager {
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
         Iterator<ConfigAttribute> iterator = configAttributes.iterator();

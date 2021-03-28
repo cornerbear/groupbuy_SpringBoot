@@ -9,6 +9,7 @@ import com.xj.groupbuy.service.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -27,6 +28,9 @@ public class MenuController {
     @Autowired
     IMenuService menuService;
 
+    /**
+     * 根据id删除菜单
+     */
     @DeleteMapping
     public CommonVO deleteMenu(Integer id){
         return menuService.deleteMenu(id);
@@ -40,10 +44,18 @@ public class MenuController {
         boolean save = menuService.saveMenu(menu);
         return new CommonVO(save,save?"保存成功":"保存失败");
     }
+
+    /**
+     * 根据id查询单个菜单
+     */
     @GetMapping("{id}")
     public CommonVO getMenu(@PathVariable Integer id){
         return new CommonVO(true,menuService.getById(id));  
     }
+
+    /**
+     * 更新菜单
+     */
     @PutMapping
     public CommonVO updateMenu(@RequestBody Menu menu){
         if(menu.getParentId() == null){
@@ -76,7 +88,10 @@ public class MenuController {
      * @return 用于菜单管理的表格展示
      */
     @GetMapping("table")
-    public CommonVO menuTable(String parentId,Integer pageNo,Integer pageSize){
+    public CommonVO menuTable(String parentId, Integer pageNo, Integer pageSize, HttpServletRequest request){
+        String pageSize1 = request.getParameter("pageSize");
+        request.setAttribute("name","zxj");
+        String name = request.getParameter("name");
         return new CommonVO(true,menuService.menuTable(parentId,pageNo,pageSize));
     }
 
