@@ -1,6 +1,7 @@
 package com.xj.groupbuy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.xj.groupbuy.entity.User;
 import com.xj.groupbuy.mapper.UserMapper;
 import com.xj.groupbuy.service.IUserService;
@@ -37,5 +38,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         user.setRoles(userMapper.getUserRolesById(user.getUserId()));
         return user;
+    }
+
+    @Override
+    public int updatePassword(String userId,String newPassword) {
+        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("password",newPassword);
+        updateWrapper.eq("user_id",userId);
+        int update = userMapper.update(null, updateWrapper);
+        return update;
+
+    }
+
+    @Override
+    public int checkUser(String username) {
+        return userMapper.selectCount(new QueryWrapper<User>().eq("username",username));
     }
 }

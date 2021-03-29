@@ -1,6 +1,7 @@
 package com.xj.groupbuy.common.util;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -109,5 +110,12 @@ public class VerificationCode {
 
     public static void output(BufferedImage image, OutputStream out) throws IOException {
         ImageIO.write(image, "JPEG", out);
+    }
+    
+    public static void checkCode(String code, String verify_code) {
+//        if (code == null || verify_code == null || "".equals(code) || !verify_code.toLowerCase().equals(code.toLowerCase())) {
+//            //验证码不正确
+//            throw new AuthenticationServiceException("验证码不正确");
+//        }
     }
 }
