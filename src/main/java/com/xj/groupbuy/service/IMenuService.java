@@ -25,7 +25,7 @@ public interface IMenuService extends IService<Menu> {
 
     List<Menu> getAllMenusIdAndName();
 
-    List<Integer> getMenuIdsByRoleId(Integer roleId);
+    List<Integer> getLeafMenuIdsByRoleId(Integer roleId);
 
     IPage<?> menuTable(String parentId, Integer pageNo, Integer pageSize);
 

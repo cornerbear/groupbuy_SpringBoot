@@ -116,7 +116,7 @@ public class MenuController {
      */
     @GetMapping("ids/{roleId}")
     public List<Integer> getMenuIdsByRoleId(@PathVariable Integer roleId) {
-        return menuService.getMenuIdsByRoleId(roleId);
+        return menuService.getLeafMenuIdsByRoleId(roleId);
     }
 
 }

@@ -1,8 +1,10 @@
 package com.xj.groupbuy.mapper;
 
-import com.xj.groupbuy.entity.MenuRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xj.groupbuy.entity.RoleMenu;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,6 +15,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2021-03-24
  */
 @Mapper
-public interface MenuRoleMapper extends BaseMapper<MenuRole> {
+public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
 
+    List<Integer> getMenuIdsByRoleId(Integer roleId,boolean onlyLeaf);
 }

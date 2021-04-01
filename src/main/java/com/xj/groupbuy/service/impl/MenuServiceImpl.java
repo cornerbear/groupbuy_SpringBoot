@@ -11,9 +11,9 @@ import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.Category;
 import com.xj.groupbuy.entity.Goods;
 import com.xj.groupbuy.entity.Menu;
-import com.xj.groupbuy.entity.MenuRole;
+import com.xj.groupbuy.entity.RoleMenu;
 import com.xj.groupbuy.mapper.MenuMapper;
-import com.xj.groupbuy.mapper.MenuRoleMapper;
+import com.xj.groupbuy.mapper.RoleMenuMapper;
 import com.xj.groupbuy.service.IMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     @Autowired
     private MenuMapper menuMapper;
     @Autowired
-    private MenuRoleMapper menuRoleMapper;
+    private RoleMenuMapper roleMenuMapper;
     
     @Override
     public List<Menu> getAllMenusWithRole() {
@@ -61,8 +61,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-    public List<Integer> getMenuIdsByRoleId(Integer roleId) {
-        return menuMapper.getMenuIdsByRoleId(roleId);
+    public List<Integer> getLeafMenuIdsByRoleId(Integer roleId) {
+        return roleMenuMapper.getMenuIdsByRoleId(roleId,true);
     }
 
     @Override
@@ -90,10 +90,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     public boolean saveMenu(Menu menu) {
         boolean save = this.save(menu);
         Integer id = menu.getId();
-        MenuRole menuRole = new MenuRole();
-        menuRole.setMenuId(id);
-        menuRole.setRoleId(1);
-        menuRoleMapper.insert(menuRole);
+        RoleMenu roleMenu = new RoleMenu(1,id);
+        roleMenuMapper.insert(roleMenu);
         return save;
     }
 
@@ -104,7 +102,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
             return new CommonVO(false,"尚存在子菜单，禁止删除");
         } else {
             menuMapper.deleteById(id);
-            menuRoleMapper.delete(new QueryWrapper<MenuRole>().eq("menu_id",id));
+            roleMenuMapper.delete(new QueryWrapper<RoleMenu>().eq("menu_id",id));
             return new CommonVO(true,"删除成功");
         }
     }

@@ -37,7 +37,7 @@
         <collection property="roles" ofType="com.xj.groupbuy.entity.Role">
             <id column="rid" property="roleId"/>
             <result column="rname" property="name"/>
-            <result column="rnameZh" property="namezh"/>
+            <result column="rnameZh" property="nameZh"/>
         </collection>
     </resultMap>
 
@@ -62,12 +62,12 @@
                r.`nameZh` as rnameZh 
         from 
              `menu` m,
-             `menu_role` mr,
+             `role_menu` rm,
              `role` r 
         where 
-              m.`id`=mr.`menu_id` 
+              m.`id`=rm.`menu_id` 
           and 
-              mr.`role_id`=r.`role_id` 
+              rm.`role_id`=r.`role_id` 
         order by m.`id`
     </select>
 
@@ -77,13 +77,13 @@
         from 
              menu m,
              user_role ur,
-             menu_role mr 
+             role_menu rm 
         where 
             ur.`user_id`=#{userId} 
           and
-            ur.`role_id`=mr.`role_id` 
-          and 
-            mr.`menu_id`=m.`id` 
+            ur.`role_id`=rm.`role_id` 
+          and
+            rm.`menu_id`=m.`id` 
         order by 
                  m.`id`
     </select>
@@ -101,13 +101,4 @@
     </select>
 
 
-    <select id="getMenuIdsByRoleId" resultType="java.lang.Integer">
-        select 
-               mr.menu_id 
-        from menu_role mr,menu m 
-        where 
-              mr.menu_id = m.id 
-          and role_id=#{roleId} 
-          and m.parent_id != 0;
-    </select>
 </mapper>

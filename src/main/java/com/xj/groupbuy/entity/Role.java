@@ -31,7 +31,7 @@ public class Role implements Serializable {
     private String name;
 
     @TableField("nameZh")
-    private String namezh;
+    private String nameZh;
 
 
 }
