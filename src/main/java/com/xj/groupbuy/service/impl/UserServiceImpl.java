@@ -2,6 +2,9 @@ package com.xj.groupbuy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xj.groupbuy.entity.Role;
 import com.xj.groupbuy.entity.User;
 import com.xj.groupbuy.mapper.UserMapper;
 import com.xj.groupbuy.service.IUserService;
@@ -12,6 +15,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -33,9 +39,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",username);
         User user = userMapper.selectOne(queryWrapper);
+        
         if (user == null) {
             throw new UsernameNotFoundException("用户名不存在");
         }
+        
+        // 用户登录时设置权限
         user.setRoles(userMapper.getUserRolesById(user.getUserId()));
         return user;
     }
@@ -53,5 +62,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public int checkUser(String username) {
         return userMapper.selectCount(new QueryWrapper<User>().eq("username",username));
+    }
+
+    @Override
+    public IPage<User> userRoleTable(String userId, String name, Integer pageNo, Integer pageSize) {
+        Page<User> userPage = new Page<>(pageNo,pageSize);
+        return userMapper.getAllUserSimple(name, userId, userPage);
     }
 }

@@ -19,35 +19,58 @@
             <result column="rnameZh" property="nameZh"/>
         </collection>
     </resultMap>
-
+    
     <select id="getAllUser" resultMap="UserWithRoles">
-        select 
-               u.user_id, 
-               u.username, 
-               u.password, 
-               u.user_sex, 
-               u.user_phone, 
-               u.user_address,
-               u.name,
-               u.enable,
-               r.`role_id` as rid,
-               r.`name` as rname,
-               r.`nameZh` as rnameZh 
+        select
+        u.user_id,
+        u.username,
+        u.password,
+        u.user_sex,
+        u.user_phone,
+        u.user_address,
+        u.name,
+        u.enabled,
+        r.`role_id` as rid,
+        r.`name` as rname,
+        r.`nameZh` as rnameZh
         from `user` u
-            left join `user_role` ur on u.`user_id`=ur.`user_id` 
-            left join `role` r on ur.`role_id`=r.`role_id` 
-        where u.`user_id`!=#{hrid}
+        left join `user_role` ur on u.`user_id`=ur.`user_id`
+        left join `role` r on ur.`role_id`=r.`role_id`
+        where u.`user_id`!=#{userId}
         <if test="keywords!=null">
-            and hr.name like concat('%',#{keywords},'%')
+            and u.name like concat('%',#{keywords},'%')
         </if>
-        order by hr.id
+        order by u.user_id
     </select>
 
-    
-    <select id="getUserRolesById" resultType="com.xj.groupbuy.entity.Role">
-        select r.* 
-        from `role` r, `user_role` ur 
-        where ur.`role_id`=r.`role_id` and ur.`user_id`=#{id}
+    <select id="getAllUserSimple" resultMap="UserWithRoles">
+        select
+        u.user_id,
+        u.username,
+        u.name,
+        u.enabled,
+        r.`role_id` as rid,
+        r.`name` as rname,
+        r.`nameZh` as rnameZh
+        from `user` u
+        left join `user_role` ur on u.`user_id`=ur.`user_id`
+        left join `role` r on ur.`role_id`=r.`role_id`
+        where 1 = 1
+        <if test="name!=null">
+            and u.name like concat('%',#{name},'%')
+        </if>
+        <if test="userId!=null">
+            and u.`user_id`==#{userId}
+        </if>
+        order by u.user_id
     </select>
-    
+
+    <select id="getUserRolesById" resultType="com.xj.groupbuy.entity.Role">
+        select r.*
+        from `role` r,
+             `user_role` ur
+        where ur.`role_id` = r.`role_id`
+          and ur.`user_id` = #{id}
+    </select>
+
 </mapper>

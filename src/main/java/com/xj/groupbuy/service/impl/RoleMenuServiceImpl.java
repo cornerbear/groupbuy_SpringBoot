@@ -38,8 +38,6 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
         // 1. 先根据roleId查询出对应的menuIds
         List<Integer> menuIdsByRoleId = roleMenuMapper.getMenuIdsByRoleId(roleId,false);
         
-        // 2. menuIds去重
-        List<Integer> willAdd = new ArrayList<>();      // 应该添加的menuId
         if(NullUtils.notEmpty(menuIds)){
             // 3. 先删除不该存在的 id 先删除 1，3
             roleMenuMapper.delete(new QueryWrapper<RoleMenu>().notIn("menu_id",menuIds));
