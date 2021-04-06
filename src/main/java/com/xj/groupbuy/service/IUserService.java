@@ -1,6 +1,7 @@
 package com.xj.groupbuy.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,4 +24,6 @@ public interface IUserService extends IService<User>, UserDetailsService {
     int checkUser(String username);
 
     IPage<User> userRoleTable(String userId, String name, Integer pageNo, Integer pageSize);
+
+    CommonVO getUserAndRoleById(String userId);
 }

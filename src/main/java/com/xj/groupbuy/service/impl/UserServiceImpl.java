@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.Role;
 import com.xj.groupbuy.entity.User;
 import com.xj.groupbuy.mapper.UserMapper;
@@ -29,7 +30,8 @@ import java.util.Map;
  */
 @Service
 @Primary
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService, UserDetailsService {
+public class 
+UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService, UserDetailsService {
 
     @Autowired
     private UserMapper userMapper;
@@ -68,5 +70,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public IPage<User> userRoleTable(String userId, String name, Integer pageNo, Integer pageSize) {
         Page<User> userPage = new Page<>(pageNo,pageSize);
         return userMapper.getAllUserSimple(name, userId, userPage);
+    }
+
+    @Override
+    public CommonVO getUserAndRoleById(String userId) {
+        User user = userMapper.selectById(userId);
+        user.setRoles(userMapper.getUserRolesById(userId));
+        return new CommonVO(true,user);
     }
 }

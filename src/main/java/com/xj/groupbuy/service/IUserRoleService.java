@@ -19,4 +19,5 @@ public interface IUserRoleService extends IService<UserRole> {
     CommonVO getUserRoleById(String userId);
 
     CommonVO updateUserRoleById(String userId, List<Integer> roleIds);
+
 }

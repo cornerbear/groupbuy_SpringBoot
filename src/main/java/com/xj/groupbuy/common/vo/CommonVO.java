@@ -31,21 +31,22 @@ public class CommonVO {
 		this.success = success;
 		this.data = data;
 	}
-	public CommonVO(Integer status,String msg, Object data) {
+	public CommonVO(boolean success,Integer status,String msg, Object data) {
+		this.success = success;
 		this.status = status;
 		this.msg = msg;
 		this.data = data;
 	}
 
 	public static Object ok(String msg) {
-		return new CommonVO(200,msg,null);
+		return new CommonVO(true,200,msg,null);
 	}
 	public static CommonVO ok(String msg, Object data) {
-		return new CommonVO(200,msg,data);
+		return new CommonVO(true,200,msg,data);
 	}
 
 	public static CommonVO error(String msg) {
-		return new CommonVO(500,msg,null);
+		return new CommonVO(false,500,msg,null);
 	}
 
 }
