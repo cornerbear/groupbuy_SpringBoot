@@ -21,6 +21,10 @@ spring:
 #    url: redis://flower:flower1360+@r-bp17py7fch809jyx5fpd.redis.rds.aliyuncs.com:6379
     host: 127.0.0.1
     port: 6379
+  servlet:
+    multipart:
+      max-file-size: 100MB
+
 #mybatis:
 #  config-location: classpath:mybatis/mybatis-config.xml
 #  mapper-locations: classpath:mybatis/mapper/*.xml
@@ -38,3 +42,6 @@ mybatis-plus:
 #  level: debug
 server:
   port: 8888
+  
+upload:
+  path: F://test//upload//
