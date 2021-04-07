@@ -17,7 +17,7 @@ public class FileNameUtil {
         return fileName.substring(fileName.lastIndexOf("."));
     }
     public static String getPrefix(String fileName){
-        return fileName.substring(fileName.indexOf("."));
+        return fileName.substring(0,fileName.lastIndexOf("."));
     }
 
     /**
