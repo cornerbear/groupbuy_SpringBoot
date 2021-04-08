@@ -1,17 +1,16 @@
 package com.xj.groupbuy.controller.manager;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xj.groupbuy.common.properties.FileProperties;
 import com.xj.groupbuy.common.util.FileUtil;
 import com.xj.groupbuy.common.vo.CommonVO;
+import com.xj.groupbuy.entity.Goods;
 import com.xj.groupbuy.entity.StaffTrain;
 import com.xj.groupbuy.service.IStaffTrainService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -41,5 +40,11 @@ public class StaffTrainController {
         return staffTrainService.saveStaffTrain(uploadFileName,trainName,trainContent);
 
 //        return new CommonVO(upload,upload?"上传成功":"上传失败");
+    }
+    
+    @GetMapping("all/{pageNo}/{pageSize}")
+    public Page<?> getAllStaffTrain(@PathVariable(value = "pageNo") Integer pageNo, @PathVariable(value = "pageSize") Integer pageSize){
+        Page<StaffTrain> paramPage = new Page<>(pageNo,pageSize);
+        return staffTrainService.page(paramPage, null);
     }
 }

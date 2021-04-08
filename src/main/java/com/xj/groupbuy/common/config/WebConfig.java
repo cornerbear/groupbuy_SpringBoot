@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * Author : zhangxiaojian
  * Date : 2021/3/2
  */
-@Configuration
+//@Configuration
 public class WebConfig implements WebMvcConfigurer {
 
 //    @Autowired
