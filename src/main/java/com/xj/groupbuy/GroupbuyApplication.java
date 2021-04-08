@@ -12,11 +12,12 @@ import java.util.Arrays;
 public class GroupbuyApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext run = SpringApplication.run(GroupbuyApplication.class, args);
-        String[] names = run.getBeanDefinitionNames();
-        for (String name : names) {
-            System.out.println(name);
-        }
+        SpringApplication.run(GroupbuyApplication.class, args);
+//        ConfigurableApplicationContext run =
+//        String[] names = run.getBeanDefinitionNames();
+//        for (String name : names) {
+//            System.out.println(name);
+//        }
     }
 
 }
