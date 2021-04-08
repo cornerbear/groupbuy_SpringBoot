@@ -17,7 +17,7 @@ public class FileUtil {
      * @param fileName 源文件名
      * @return
      */
-    public static String upload(MultipartFile file, String path, String fileName) {
+    public static boolean upload(MultipartFile file, String path, String fileName) {
         
         // 生成新的文件名
         String realPath = path + "/" + FileNameUtil.getFileName(fileName);
@@ -34,15 +34,15 @@ public class FileUtil {
         try {
             //保存文件
             file.transferTo(dest);
-            return realPath;
+            return true;
         } catch (IllegalStateException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return null;
+            return false;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return null;
+            return false;
         }
 
     }
