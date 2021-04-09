@@ -3,6 +3,7 @@ package com.xj.groupbuy.service;
 import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.StaffTrain;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -14,5 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IStaffTrainService extends IService<StaffTrain> {
 
-    CommonVO saveStaffTrain(String uploadFileName,String trainName, String trainContent);
+    CommonVO getStaffTrainDetail(Integer trainId);
+
+    CommonVO saveTrainAndUpload(MultipartFile[] multipartFiles, String trainName, String trainContent);
 }

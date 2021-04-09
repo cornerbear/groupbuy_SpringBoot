@@ -1,5 +1,7 @@
 package com.xj.groupbuy.service.impl;
 
+import com.xj.groupbuy.common.properties.FileProperties;
+import com.xj.groupbuy.common.util.FileUtil;
 import com.xj.groupbuy.common.util.UserUtil;
 import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.StaffTrain;
@@ -11,10 +13,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author zhangxiaojian
@@ -28,17 +33,41 @@ public class StaffTrainServiceImpl extends ServiceImpl<StaffTrainMapper, StaffTr
     private StaffTrainMapper staffTrainMapper;
     @Autowired
     private TrainFileMapper trainFileMapper;
-    
+    @Autowired
+    private FileProperties fileProperties;
+
     @Override
-    public CommonVO saveStaffTrain(String uploadFileName,String trainName, String trainContent) {
-        if(uploadFileName == null){
-            return new CommonVO(false,"文件上传失败");
-        } else {
-            StaffTrain staffTrain = new StaffTrain(trainName,trainContent, UserUtil.getCurrentUser().getUserId());
-            int insert = staffTrainMapper.insert(staffTrain);
-            TrainFile trainFile = new TrainFile(staffTrain.getId(),uploadFileName);
-            trainFileMapper.insert(trainFile);
-            return new CommonVO(insert==1,insert==1?"保存成功":"保存失败");
+    public CommonVO getStaffTrainDetail(Integer trainId) {
+
+        List<StaffTrain> staffTrainsWithFiles = staffTrainMapper.getStaffTrainDetail(trainId);
+
+        // 处理一下path
+        for (StaffTrain staffTrainsWithFile : staffTrainsWithFiles) {
+            for (TrainFile file : staffTrainsWithFile.getFiles()) {
+                String filePath = file.getFilePath();
+                int i = filePath.lastIndexOf(".");
+                int j = filePath.lastIndexOf("/");
+                filePath = filePath.substring(j + 1, i - 11) + filePath.substring(i);
+                file.setFilePath(filePath);
+            }
         }
+
+        return new CommonVO(true, staffTrainsWithFiles.get(0));
+    }
+
+    @Override
+    public CommonVO saveTrainAndUpload(MultipartFile[] multipartFiles, String trainName, String trainContent) {
+
+        StaffTrain staffTrain = new StaffTrain(trainName, trainContent, UserUtil.getCurrentUser().getUserId());
+        staffTrainMapper.insert(staffTrain);
+        
+        Integer trainId = staffTrain.getId();
+
+        for (MultipartFile multipartFile : multipartFiles) {
+            String uploadFilePath = FileUtil.upload(multipartFile, fileProperties.getPath(), multipartFile.getOriginalFilename());
+            trainFileMapper.insert(new TrainFile(trainId,uploadFilePath));
+        }
+
+        return new CommonVO(true,"发布成功");
     }
 }

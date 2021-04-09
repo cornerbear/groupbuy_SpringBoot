@@ -1,8 +1,13 @@
 package com.xj.groupbuy.common.util;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -10,7 +15,7 @@ import java.io.IOException;
  * Date : 2021/4/7
  */
 public class FileUtil {
-    
+
     /**
      * @param file     文件
      * @param path     文件存放路径
@@ -18,9 +23,9 @@ public class FileUtil {
      * @return
      */
     public static String upload(MultipartFile file, String path, String fileName) {
-        
+
         // 生成新的文件名
-        String realPath = path + "/" + FileNameUtil.getFileName(fileName);
+        String realPath = path + FileNameUtil.getFileName(fileName);
 
         //使用原文件名
 //        String realPath = path + "/" + fileName;
@@ -45,6 +50,29 @@ public class FileUtil {
             return null;
         }
 
+    }
+
+    public static ResponseEntity<Object> download(String path) {
+
+        File file = new File(path);
+        String fileName = file.getName();
+        InputStreamResource resource = null;
+        try {
+            resource = new InputStreamResource(new FileInputStream(file));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", String.format("attachment;filename=\"%s", fileName));
+        headers.add("Cache-Control", "no-cache,no-store,must-revalidate");
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+        ResponseEntity<Object> responseEntity = ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(resource);
+        return responseEntity;
     }
 
 }

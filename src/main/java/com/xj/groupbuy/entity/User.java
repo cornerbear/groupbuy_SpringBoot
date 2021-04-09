@@ -1,5 +1,6 @@
 package com.xj.groupbuy.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
@@ -30,7 +31,7 @@ public class User implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId("USER_ID")
+    @TableId(value = "USER_ID",type = IdType.AUTO)
     private String userId;
 
     @TableField("NAME")

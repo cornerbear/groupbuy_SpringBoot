@@ -43,5 +43,5 @@ mybatis-plus:
 server:
   port: 8888
   
-#upload:
-#  path: F://test//upload//
+upload:
+  path: F://test//upload//
