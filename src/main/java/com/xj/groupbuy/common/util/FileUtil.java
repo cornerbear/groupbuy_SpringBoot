@@ -75,4 +75,16 @@ public class FileUtil {
         return responseEntity;
     }
 
+    public static boolean delete(String filePath) {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return false;
+        } else {
+            if (file.delete()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }

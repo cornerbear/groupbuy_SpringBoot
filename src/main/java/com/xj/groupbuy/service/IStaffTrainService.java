@@ -18,4 +18,6 @@ public interface IStaffTrainService extends IService<StaffTrain> {
     CommonVO getStaffTrainDetail(Integer trainId);
 
     CommonVO saveTrainAndUpload(MultipartFile[] multipartFiles, String trainName, String trainContent);
+
+    CommonVO deleteStaffTrain(Integer trainId);
 }

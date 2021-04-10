@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,5 +70,24 @@ public class StaffTrainServiceImpl extends ServiceImpl<StaffTrainMapper, StaffTr
         }
 
         return new CommonVO(true,"发布成功");
+    }
+
+    @Override
+    public CommonVO deleteStaffTrain(Integer trainId) {
+
+        List<StaffTrain> staffTrainsWithFiles = staffTrainMapper.getStaffTrainDetail(trainId);
+        StaffTrain staffTrain = staffTrainsWithFiles.get(0);
+        for (TrainFile file : staffTrain.getFiles()) {
+            String filePath = file.getFilePath();
+            // 删除培训文件数据库
+            trainFileMapper.deleteById(file.getId());
+            
+            // 删除计算机文件
+            FileUtil.delete(filePath);
+        }
+        
+        // 删除培训
+        staffTrainMapper.deleteById(trainId);
+        return new CommonVO(true,"删除成功");
     }
 }

@@ -97,4 +97,11 @@ public class StaffTrainController {
 
         return staffTrainService.getStaffTrainDetail(trainId);
     }
+
+    @DeleteMapping("{trainId}")
+    @ResponseBody
+    public CommonVO deleteStaffTrain(@PathVariable Integer trainId) {
+
+        return staffTrainService.deleteStaffTrain(trainId);
+    }
 }
