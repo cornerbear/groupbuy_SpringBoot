@@ -30,8 +30,7 @@ import java.util.Map;
  */
 @Service
 @Primary
-public class 
-UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService, UserDetailsService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService, UserDetailsService {
 
     @Autowired
     private UserMapper userMapper;
@@ -77,5 +76,11 @@ UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService, U
         User user = userMapper.selectById(userId);
         user.setRoles(userMapper.getUserRolesById(userId));
         return new CommonVO(true,user);
+    }
+
+    @Override
+    public IPage<?> getUsersByRole(String userRole, Integer pageNo, Integer pageSize) {
+        Page<User> userPage = new Page<>(pageNo,pageSize);
+        return userMapper.getUsersByRole(userRole, userPage);
     }
 }

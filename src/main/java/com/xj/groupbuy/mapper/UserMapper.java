@@ -28,4 +28,7 @@ public interface UserMapper extends BaseMapper<User> {
 
     IPage<User> getAllUserSimple(String name, String userId,
                                               Page<?> page);
+
+    IPage<?> getUsersByRole(String userRole, Page<User> userPage);
+
 }

@@ -26,4 +26,6 @@ public interface IUserService extends IService<User>, UserDetailsService {
     IPage<User> userRoleTable(String userId, String name, Integer pageNo, Integer pageSize);
 
     CommonVO getUserAndRoleById(String userId);
+
+    IPage<?> getUsersByRole(String userRole, Integer pageNo, Integer pageSize);
 }

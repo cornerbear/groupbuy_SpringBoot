@@ -73,4 +73,23 @@
           and ur.`user_id` = #{id}
     </select>
 
+    <select id="getUsersByRole" resultMap="BaseResultMap">
+        select
+        u.user_id,
+        u.username,
+        u.password,
+        u.user_sex,
+        u.user_phone,
+        u.user_address,
+        u.name,
+        u.enabled 
+        from `user` u
+        left join `user_role` ur on u.`user_id`=ur.`user_id`
+        left join `role` r on ur.`role_id`=r.`role_id`
+        where 1 = 1
+        <if test="userRole!=null">
+            and r.name = #{userRole}
+        </if>
+        order by u.user_id
+    </select>
 </mapper>
