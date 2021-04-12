@@ -5,6 +5,7 @@ import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -28,4 +29,5 @@ public interface IUserService extends IService<User>, UserDetailsService {
     CommonVO getUserAndRoleById(String userId);
 
     IPage<?> getUsersByRole(String userRole, Integer pageNo, Integer pageSize);
+
 }

@@ -2,10 +2,12 @@ package com.xj.groupbuy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xj.groupbuy.common.util.NullUtils;
+import com.xj.groupbuy.common.util.OfficeUtil;
 import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.Role;
 import com.xj.groupbuy.entity.RoleMenu;
 import com.xj.groupbuy.entity.UserRole;
+import com.xj.groupbuy.mapper.RoleMapper;
 import com.xj.groupbuy.mapper.UserMapper;
 import com.xj.groupbuy.mapper.UserRoleMapper;
 import com.xj.groupbuy.service.IUserRoleService;
@@ -13,9 +15,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * <p>
@@ -33,6 +38,8 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     private UserRoleMapper userRoleMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private RoleMapper roleMapper;
 
 
     @Override
@@ -51,13 +58,13 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 
         List<Integer> userRoleIds = userRoleMapper.getUserRolesIdById(userId);
 
-        if (!this.checkBaseRole(userId,roleIds)) {
-            return new CommonVO(false,"该用户的 【管理员】 权限不可删除");
+        if (!this.checkBaseRole(userId, roleIds)) {
+            return new CommonVO(false, "该用户的 【管理员】 权限不可删除");
         }
 
         if (NullUtils.notEmpty(roleIds)) {
             // 3. 先删除不该存在的 id 先删除 1，3
-            userRoleMapper.delete(new QueryWrapper<UserRole>().eq("user_id",userId).notIn("role_id", roleIds));
+            userRoleMapper.delete(new QueryWrapper<UserRole>().eq("user_id", userId).notIn("role_id", roleIds));
 
             // 4. 保存不存在的 id  8，9
             for (Integer roleId : roleIds) {
@@ -74,16 +81,66 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         return new CommonVO(true, "修改成功");
     }
 
-    public boolean checkBaseRole(String userId, List<Integer> changeUserRoleIds) {
+    @Override
+    public CommonVO addRoleBatch(MultipartFile[] files, String userRoleName) {
         
+        Role role = roleMapper.selectOne(new QueryWrapper<Role>().eq("name", userRoleName));
+
+        List<String> exitsUserId = new ArrayList<>();
+        
+        for (MultipartFile file : files) {
+            Map<Integer, List<Object>> result = OfficeUtil.readExcelContents(file);
+            List<String> userIds = new ArrayList<>();
+            result.forEach((k,v)->{
+                if(v.get(0).toString().equals("userId")){
+                    for (int i = 1; i < v.size(); i++) {
+                        userIds.add(v.get(i).toString());
+                    }
+                }
+            });
+            System.out.println(userIds);
+
+            for (String userId : userIds) {
+                Integer count = userRoleMapper.selectCount(new QueryWrapper<UserRole>().eq("user_id", userId));
+                if(count == 0){
+                    UserRole userRole = new UserRole(userId, role.getRoleId());
+                    userRoleMapper.insert(userRole);
+                } else {
+                    // 已存在的用户ID
+                    exitsUserId.add(userId);
+                }
+            }
+        }
+        return new CommonVO(true, "上传成功",exitsUserId);
+    }
+
+    @Override
+    public CommonVO addRoleSingle(String userId, String userRoleName) {
+        Role role = roleMapper.selectOne(new QueryWrapper<Role>().eq("name", userRoleName));
+        UserRole userRole = new UserRole(userId, role.getRoleId());
+        Integer count = userRoleMapper.selectCount(new QueryWrapper<UserRole>().eq("user_id", userId).eq("role_id", role.getRoleId()));
+        if (count != 0) {
+            return new CommonVO(false, "当前用户已有该身份");
+        } else {
+            int insert = userRoleMapper.insert(userRole);
+            if (insert == 1) {
+                return new CommonVO(true, "添加成功");
+            } else {
+                return new CommonVO(false, "添加异常，变更" + insert);
+            }
+        }
+    }
+
+    public boolean checkBaseRole(String userId, List<Integer> changeUserRoleIds) {
+
         // 如果是管理员账号
-        if(userId.equals("1")){
-            if(changeUserRoleIds == null){
+        if (userId.equals("1")) {
+            if (changeUserRoleIds == null) {
                 return false;
             }
-            return changeUserRoleIds.contains(1); 
+            return changeUserRoleIds.contains(1);
         }
-        
+
         return true;
     }
 }
