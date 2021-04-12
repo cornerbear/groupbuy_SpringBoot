@@ -1,6 +1,10 @@
 # groupbuy_SpringBoot
 奇奇怪怪的毕设
 
+
+
+0.4.1 :heavy_plus_sign:  +添加poi依赖，用于解析xls
+
 0.4.0 :new:  员工管理功能，完成显示员工功能
 
 ---
