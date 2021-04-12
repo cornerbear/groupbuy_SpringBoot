@@ -126,7 +126,22 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
             if (insert == 1) {
                 return new CommonVO(true, "添加成功");
             } else {
-                return new CommonVO(false, "添加异常，变更" + insert);
+                return new CommonVO(false, "添加异常，变更" + insert + "条记录");
+            }
+        }
+    }
+
+    @Override
+    public CommonVO deleteRole(String userId, String userRoleName) {
+        Role role = roleMapper.selectOne(new QueryWrapper<Role>().eq("name", userRoleName));
+        if(role == null){
+            return new CommonVO(false,"无 [ "+userRoleName+" ] 身份");
+        } else {
+            int delete = userRoleMapper.delete(new QueryWrapper<UserRole>().eq("user_id", userId).eq("role_id", role.getRoleId()));
+            if (delete == 1) {
+                return new CommonVO(true, "删除成功");
+            } else {
+                return new CommonVO(false, "删除异常，变更" + delete + "条记录");
             }
         }
     }

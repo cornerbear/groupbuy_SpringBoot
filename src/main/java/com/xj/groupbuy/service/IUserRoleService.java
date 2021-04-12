@@ -24,4 +24,6 @@ public interface IUserRoleService extends IService<UserRole> {
     CommonVO addRoleBatch(MultipartFile[] files, String userRoleName);
 
     CommonVO addRoleSingle(String userId, String userRoleName);
+
+    CommonVO deleteRole(String userId, String userRoleName);
 }

@@ -28,6 +28,10 @@ public class StaffController {
     public IPage<?> getAllStaff(@PathVariable(value = "pageNo") Integer pageNo, @PathVariable(value = "pageSize") Integer pageSize) {
         return userService.getUsersByRole("ROLE_STAFF",pageNo,pageSize);
     }
+    @DeleteMapping("{userId}")
+    public CommonVO deleteStaff(@PathVariable String userId){
+        return userRoleService.deleteRole(userId,"ROLE_STAFF");
+    }
 
     @PostMapping("batchAdd")
     public CommonVO addStaffBatch(@RequestParam("files") MultipartFile[] files){
