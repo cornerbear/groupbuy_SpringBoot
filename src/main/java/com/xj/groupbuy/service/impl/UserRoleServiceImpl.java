@@ -146,6 +146,13 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         }
     }
 
+    @Override
+    public boolean checkRole(String userId, String userRoleName) {
+        Role role = roleMapper.selectOne(new QueryWrapper<Role>().eq("name", userRoleName));
+        Integer count = userRoleMapper.selectCount(new QueryWrapper<UserRole>().eq("user_id", userId).eq("role_id", role.getRoleId()));
+        return count >= 1;
+    }
+
     public boolean checkBaseRole(String userId, List<Integer> changeUserRoleIds) {
 
         // 如果是管理员账号

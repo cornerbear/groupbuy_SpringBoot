@@ -26,4 +26,6 @@ public interface IUserRoleService extends IService<UserRole> {
     CommonVO addRoleSingle(String userId, String userRoleName);
 
     CommonVO deleteRole(String userId, String userRoleName);
+
+    boolean checkRole(String userId, String userRoleName);
 }
