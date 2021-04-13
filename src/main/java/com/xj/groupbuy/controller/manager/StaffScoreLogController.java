@@ -2,13 +2,10 @@ package com.xj.groupbuy.controller.manager;
 
 
 import com.xj.groupbuy.common.vo.CommonVO;
+import com.xj.groupbuy.entity.StaffScoreLog;
 import com.xj.groupbuy.service.IStaffScoreLogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -29,5 +26,10 @@ public class StaffScoreLogController {
     public CommonVO getStaffScoreLogs(@PathVariable String userId){
 
         return staffScoreLogService.getStaffScoreLogs(userId);
+    }
+    
+    @PostMapping
+    public CommonVO insertStaffScoreLog(@RequestBody StaffScoreLog staffScoreLog){
+        return staffScoreLogService.insertStaffScoreLog(staffScoreLog);
     }
 }

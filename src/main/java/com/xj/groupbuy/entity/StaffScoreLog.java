@@ -34,6 +34,12 @@ public class StaffScoreLog implements Serializable {
     /**
      * 操作前分数
      */
+    @TableField("CHANGE_SCORE")
+    private BigDecimal changeScore;
+    
+    /**
+     * 操作前分数
+     */
     @TableField("BEFORE_SCORE")
     private BigDecimal beforeScore;
 
@@ -62,7 +68,7 @@ public class StaffScoreLog implements Serializable {
     private String logTime;
 
     /**
-     * 0增长，1减少
+     * 1增长，0减少
      */
     @TableField("ACTION")
     private Boolean action;

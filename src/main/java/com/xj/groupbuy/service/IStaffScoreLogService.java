@@ -15,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IStaffScoreLogService extends IService<StaffScoreLog> {
 
     CommonVO getStaffScoreLogs(String userId);
+
+    CommonVO insertStaffScoreLog(StaffScoreLog staffScoreLog);
 }
