@@ -1,8 +1,11 @@
 package com.xj.groupbuy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.StaffScore;
+import com.xj.groupbuy.entity.User;
 import com.xj.groupbuy.mapper.StaffScoreMapper;
 import com.xj.groupbuy.service.IStaffScoreService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -41,5 +44,11 @@ public class StaffScoreServiceImpl extends ServiceImpl<StaffScoreMapper, StaffSc
         } else {
             return new CommonVO(false,"该用户不为员工");
         }
+    }
+
+    @Override
+    public IPage<?> getStaffScores(Integer pageNo, Integer pageSize) {
+        Page<User> page = new Page<>(pageNo, pageSize);
+        return staffScoreMapper.getStaffScores(page);
     }
 }

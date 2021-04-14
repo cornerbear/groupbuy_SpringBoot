@@ -2,6 +2,7 @@ package com.xj.groupbuy.controller.manager;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.StaffScore;
 import com.xj.groupbuy.service.IStaffScoreService;
@@ -31,6 +32,11 @@ public class StaffScoreController {
     public CommonVO getStaffScore(@PathVariable String userId){
         
         return staffScoreService.gotStaffScore(userId);
+    }
+    
+    @GetMapping("all/{pageNo}/{pageSize}")
+    public IPage<?> getAllStaff(@PathVariable(value = "pageNo") Integer pageNo, @PathVariable(value = "pageSize") Integer pageSize) {
+        return staffScoreService.getStaffScores(pageNo,pageSize);
     }
 
 }

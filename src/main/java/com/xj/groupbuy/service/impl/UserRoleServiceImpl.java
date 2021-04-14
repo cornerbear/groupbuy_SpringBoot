@@ -6,8 +6,10 @@ import com.xj.groupbuy.common.util.OfficeUtil;
 import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.Role;
 import com.xj.groupbuy.entity.RoleMenu;
+import com.xj.groupbuy.entity.StaffScore;
 import com.xj.groupbuy.entity.UserRole;
 import com.xj.groupbuy.mapper.RoleMapper;
+import com.xj.groupbuy.mapper.StaffScoreMapper;
 import com.xj.groupbuy.mapper.UserMapper;
 import com.xj.groupbuy.mapper.UserRoleMapper;
 import com.xj.groupbuy.service.IUserRoleService;
@@ -37,7 +39,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     @Autowired
     private UserRoleMapper userRoleMapper;
     @Autowired
-    private UserMapper userMapper;
+    private StaffScoreMapper staffScoreMapper;
     @Autowired
     private RoleMapper roleMapper;
 
@@ -105,6 +107,10 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
                 if(count == 0){
                     UserRole userRole = new UserRole(userId, role.getRoleId());
                     userRoleMapper.insert(userRole);
+                    
+                    // 插入员工基础积分
+                    staffScoreMapper.insert(new StaffScore(userId));
+                    
                 } else {
                     // 已存在的用户ID
                     exitsUserId.add(userId);
@@ -123,6 +129,8 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
             return new CommonVO(false, "当前用户已有该身份");
         } else {
             int insert = userRoleMapper.insert(userRole);
+            // 插入员工基础积分
+            staffScoreMapper.insert(new StaffScore(userId));
             if (insert == 1) {
                 return new CommonVO(true, "添加成功");
             } else {
