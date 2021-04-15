@@ -48,7 +48,7 @@ public class StaffScoreServiceImpl extends ServiceImpl<StaffScoreMapper, StaffSc
 
     @Override
     public IPage<?> getStaffScores(Integer pageNo, Integer pageSize) {
-        Page<User> page = new Page<>(pageNo, pageSize);
+        Page<?> page = new Page<>(pageNo, pageSize);
         return staffScoreMapper.getStaffScores(page);
     }
 }

@@ -12,4 +12,8 @@ public class UserUtil {
     public static User getCurrentUser() {
         return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
+
+    public static String getUserId() {
+        return UserUtil.getCurrentUser().getUserId();
+    }
 }

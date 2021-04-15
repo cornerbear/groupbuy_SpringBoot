@@ -111,6 +111,10 @@ public class NullUtils {
         return o != null && !"".equals(o) && !"null".equals(o);
     }
 
+    public static boolean isEmpty(Object o){
+        return o == null || "".equals(o) || "null".equals(o);
+    }
+    
     public static void main(String[] args) {
         //String str = "";
         //1、判断字符串是否为空notEmpty()方法

@@ -35,7 +35,7 @@ public class StaffScoreController {
     }
     
     @GetMapping("all/{pageNo}/{pageSize}")
-    public IPage<?> getAllStaff(@PathVariable(value = "pageNo") Integer pageNo, @PathVariable(value = "pageSize") Integer pageSize) {
+    public IPage<?> getAllStaffScore(@PathVariable(value = "pageNo") Integer pageNo, @PathVariable(value = "pageSize") Integer pageSize) {
         return staffScoreService.getStaffScores(pageNo,pageSize);
     }
 

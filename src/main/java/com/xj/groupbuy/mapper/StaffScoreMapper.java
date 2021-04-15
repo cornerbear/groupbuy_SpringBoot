@@ -18,5 +18,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface StaffScoreMapper extends BaseMapper<StaffScore> {
 
-    IPage<?> getStaffScores(Page<User> page);
+    IPage<?> getStaffScores(Page<?> page);
 }

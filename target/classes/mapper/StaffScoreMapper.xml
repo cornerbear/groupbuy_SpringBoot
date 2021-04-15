@@ -12,6 +12,6 @@
         u.name
         from `staff_score` ss
         left join `user` u on ss.`user_id` = u.`user_id`
-        order by ss.score
+        order by ss.score desc
     </select>
 </mapper>
