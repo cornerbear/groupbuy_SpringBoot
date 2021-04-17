@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,11 @@ public class RegionController {
     
     @Autowired
     private IRegionService regionService;
+
+    @GetMapping("allLevel/{id}")
+    public CommonVO getAllLevelByCommunityId(@PathVariable Integer id){
+        return regionService.getAllLevelByCommunityId(id);
+    }
     
     @GetMapping("province")
     public CommonVO getAllProvinces(){

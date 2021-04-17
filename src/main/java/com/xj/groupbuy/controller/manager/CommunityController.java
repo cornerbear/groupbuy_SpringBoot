@@ -1,9 +1,11 @@
 package com.xj.groupbuy.controller.manager;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import com.xj.groupbuy.common.vo.CommonVO;
+import com.xj.groupbuy.entity.Community;
+import com.xj.groupbuy.service.ICommunityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -16,5 +18,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("manager/community")
 public class CommunityController {
+    
+    @Autowired
+    private ICommunityService communityService;
+    
+    @PostMapping
+    public CommonVO addCommunity(@RequestBody Community community){
+        boolean save = communityService.save(community);
+        return new CommonVO(save,save?"保存成功":"保存失败");
+    }
 
+    @PutMapping
+    public CommonVO updateCommunity(@RequestBody Community community){
+        boolean update = communityService.updateById(community);
+        return new CommonVO(update,update?"修改成功":"修改失败");
+    }
+
+    @GetMapping("{id}")
+    public CommonVO getCommunity(@PathVariable Integer id){
+        Community byId = communityService.getById(id);
+        return new CommonVO(true,byId);
+    }
+
+    @GetMapping("table")
+    public CommonVO table(String level,String parentCode, Integer pageNo, Integer pageSize){
+        return new CommonVO(true,communityService.table(level,parentCode,pageNo,pageSize));
+    }
 }

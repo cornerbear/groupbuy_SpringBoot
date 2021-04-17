@@ -1,47 +1,35 @@
 package com.xj.groupbuy.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author zhangxiaojian
- * @since 2021-04-15
+ * @since 2021-04-17
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class Community implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 省
-     */
-    @TableField("PROVINCE")
-    private String province;
-
-    /**
-     * 市
-     */
-    @TableField("CITY")
-    private String city;
-
-    /**
-     * 区
-     */
-    @TableField("AREA")
-    private String area;
+    
+    @TableId(value = "ID",type = IdType.AUTO)
+    private Integer id;
 
     /**
      * 街道
      */
-    @TableField("STREET")
-    private String street;
+    @TableField("STREET_CODE")
+    private Long streetCode;
 
     /**
      * 社区名
