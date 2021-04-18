@@ -1,7 +1,7 @@
 # groupbuy_SpringBoot
 奇奇怪怪的毕设
 
-
+0.8.0 :heavy_plus_sign: 添加fastjson依赖
 
 ##0.7 :tada: 社区管理完成
 
