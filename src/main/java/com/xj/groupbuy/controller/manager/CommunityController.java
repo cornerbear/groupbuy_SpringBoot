@@ -34,6 +34,12 @@ public class CommunityController {
         return new CommonVO(update,update?"修改成功":"修改失败");
     }
 
+    @DeleteMapping("{id}")
+    public CommonVO deleteCommunity(@PathVariable Integer id){
+        boolean remove = communityService.removeById(id);
+        return new CommonVO(remove,remove?"删除成功":"删除失败");
+    }
+    
     @GetMapping("{id}")
     public CommonVO getCommunity(@PathVariable Integer id){
         Community byId = communityService.getById(id);
