@@ -1,7 +1,9 @@
 package com.xj.groupbuy.service;
 
+import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.Goods;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGoodsService extends IService<Goods> {
 
+    CommonVO updateGoods(MultipartFile[] multipartFiles, Goods goods);
 }

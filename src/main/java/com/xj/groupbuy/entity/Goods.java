@@ -25,8 +25,8 @@ public class Goods implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "GOODS_ID",type = IdType.ASSIGN_ID)
-    private String goodsId;
+    @TableId(value = "ID",type = IdType.AUTO)
+    private String id;
 
     @TableField("GOODS_STORE_ID")
     private String goodsStoreId;
@@ -34,14 +34,8 @@ public class Goods implements Serializable {
     @TableField("GOODS_NAME")
     private String goodsName;
 
-    @TableField("GOODS_CAT1")
-    private String goodsCat1;
-
-    @TableField("GOODS_CAT2")
-    private String goodsCat2;
-
-    @TableField("GOODS_CAT3")
-    private String goodsCat3;
+    @TableField("GOODS_CAT")
+    private Integer goodsCat;
 
     @TableField("GOODS_EASY_DESC")
     private String goodsEasyDesc;
@@ -68,31 +62,25 @@ public class Goods implements Serializable {
      * 是否上架
      */
     @TableField("IS_ON_SALE")
-    private Integer isOnSale;
+    private Boolean isOnSale;
 
     /**
      * 是否包邮0否1是
      */
     @TableField("IS_FREE_SHIPPING")
-    private Integer isFreeShipping;
+    private Boolean isFreeShipping;
 
     /**
      * 是否推荐
      */
     @TableField("IS_RECOMMEND")
-    private Integer isRecommend;
+    private Boolean isRecommend;
 
     /**
      * 是否新品
      */
     @TableField("IS_NEW")
-    private Integer isNew;
-
-    /**
-     * 上架时间
-     */
-    @TableField("ON_TIME")
-    private String onTime;
+    private Boolean isNew;
 
     /**
      * 更新时间
