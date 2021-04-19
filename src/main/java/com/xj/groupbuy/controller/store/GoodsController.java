@@ -3,7 +3,9 @@ package com.xj.groupbuy.controller.store;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xj.groupbuy.common.util.DateUtil;
 import com.xj.groupbuy.common.util.FileUtil;
+import com.xj.groupbuy.common.util.UserUtil;
 import com.xj.groupbuy.entity.Goods;
 import com.xj.groupbuy.service.IGoodsService;
 import com.xj.groupbuy.common.vo.CommonVO;
@@ -29,7 +31,8 @@ public class GoodsController {
     @PostMapping
     public CommonVO saveGoods(@RequestBody Goods goods){
 
-        goods.setGoodsStoreId("1");
+        goods.setGoodsStoreId(UserUtil.getUserId());
+        goods.setUpdateTime(DateUtil.getCurrentDate());
         
         boolean save = goodsService.save(goods);
         String resMsg = save?"保存成功":"保存失败";
@@ -39,8 +42,7 @@ public class GoodsController {
     @DeleteMapping("{id}")
     public CommonVO deleteGoods(@PathVariable Integer id){
 
-        boolean delete = goodsService.removeById(id);
-        return new CommonVO(delete,delete?"删除成功":"删除失败");
+        return goodsService.deleteGoods(id);
     }
     @PostMapping("update")
     public CommonVO updateGoods(@RequestParam("files") MultipartFile[] multipartFiles,@RequestParam("goods") String goodsJson){

@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.util.Properties;
 
 /**
  * <p>
@@ -33,6 +34,8 @@ public class StaffTrainController {
     private IStaffTrainService staffTrainService;
     @Autowired
     private ITrainFileService trainFileService;
+    @Autowired
+    private FileProperties fileProperties;
 
     @RequestMapping("upload")
     @ResponseBody
@@ -52,7 +55,7 @@ public class StaffTrainController {
         File file = new File(trainFile.getFilePath());
         // 文件下载
         if (file.isFile()) {
-            return FileUtil.download(trainFile.getFilePath());
+            return FileUtil.download(fileProperties.getPath(),trainFile.getFilePath());
         }
 
         // 文件夹压缩成zip下载

@@ -1,7 +1,9 @@
 package com.xj.groupbuy.service.impl;
 
 import com.xj.groupbuy.common.properties.FileProperties;
+import com.xj.groupbuy.common.util.DateUtil;
 import com.xj.groupbuy.common.util.FileUtil;
+import com.xj.groupbuy.common.util.NullUtils;
 import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.Goods;
 import com.xj.groupbuy.mapper.GoodsMapper;
@@ -26,13 +28,35 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
     @Autowired
     private FileProperties fileProperties;
+    @Autowired
+    private GoodsMapper goodsMapper;
     @Override
     public CommonVO updateGoods(MultipartFile[] multipartFiles, Goods goods) {
 
+        String uploadPath = null;
         for (MultipartFile multipartFile : multipartFiles) {
-            FileUtil.upload(multipartFile,fileProperties.getPath(),multipartFile.getOriginalFilename());
+            uploadPath = FileUtil.upload(multipartFile, fileProperties.getPath(), multipartFile.getOriginalFilename());
         }
-        System.out.println(goods);
-        return null;
+        if(NullUtils.isNotEmpty(goods.getGoodsImg())){
+            // 删除旧照片
+            FileUtil.delete(goods.getGoodsImg());
+        }
+        goods.setGoodsImg(uploadPath);
+        goods.setUpdateTime(DateUtil.getCurrentDate());
+        int i = goodsMapper.updateById(goods);
+        return new CommonVO(i==1,i==1?"修改成功":"修改失败");
+    }
+
+    @Override
+    public CommonVO deleteGoods(Integer id) {
+        Goods goods = goodsMapper.selectById(id);
+        String imgPath = goods.getGoodsImg();
+        int i = goodsMapper.deleteById(id);
+        if(i == 1){
+            FileUtil.delete(imgPath);
+            return new CommonVO(true,"删除成功");
+        } else {
+            return new CommonVO(false,"删除失败");
+        }
     }
 }

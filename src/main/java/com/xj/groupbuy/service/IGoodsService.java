@@ -16,4 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 public interface IGoodsService extends IService<Goods> {
 
     CommonVO updateGoods(MultipartFile[] multipartFiles, Goods goods);
+
+    CommonVO deleteGoods(Integer id);
 }

@@ -39,7 +39,7 @@ public class FileUtil {
         try {
             //保存文件
             file.transferTo(dest);
-            return realPath;
+            return path;
         } catch (IllegalStateException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -52,10 +52,9 @@ public class FileUtil {
 
     }
 
-    public static ResponseEntity<Object> download(String path) {
+    public static ResponseEntity<Object> download(String path,String fileName) {
 
-        File file = new File(path);
-        String fileName = file.getName();
+        File file = new File(path + fileName);
         InputStreamResource resource = null;
         try {
             resource = new InputStreamResource(new FileInputStream(file));

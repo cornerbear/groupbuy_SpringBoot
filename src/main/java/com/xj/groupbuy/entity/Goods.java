@@ -47,7 +47,7 @@ public class Goods implements Serializable {
     private Integer goodsStock;
 
     @TableField("GOODS_WEIGHT")
-    private Integer goodsWeight;
+    private String goodsWeight;
 
     @TableField("GOODS_UNIT")
     private String goodsUnit;
