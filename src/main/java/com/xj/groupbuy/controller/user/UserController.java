@@ -29,6 +29,7 @@ public class UserController {
     public CommonVO getUserDetail(){
         User currentUser = UserUtil.getCurrentUser();
         User user = userService.getById(currentUser.getUserId());
+        user.setPassword(null);
         return new CommonVO(true,user);
     }
     @PutMapping

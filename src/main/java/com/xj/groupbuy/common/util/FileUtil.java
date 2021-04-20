@@ -25,7 +25,8 @@ public class FileUtil {
     public static String upload(MultipartFile file, String path, String fileName) {
 
         // 生成新的文件名
-        String realPath = path + FileNameUtil.getFileName(fileName);
+        String realFileName = FileNameUtil.getFileName(fileName);
+        String realPath = path + realFileName;
 
         //使用原文件名
 //        String realPath = path + "/" + fileName;
@@ -39,7 +40,7 @@ public class FileUtil {
         try {
             //保存文件
             file.transferTo(dest);
-            return path;
+            return realFileName;
         } catch (IllegalStateException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

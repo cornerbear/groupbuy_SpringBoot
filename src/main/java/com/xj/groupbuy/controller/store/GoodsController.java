@@ -2,6 +2,7 @@ package com.xj.groupbuy.controller.store;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xj.groupbuy.common.util.DateUtil;
 import com.xj.groupbuy.common.util.FileUtil;
@@ -59,7 +60,7 @@ public class GoodsController {
     public Page<Goods> getGoodsAll(@PathVariable(value = "pageNo") Integer pageNo, @PathVariable(value = "pageSize") Integer pageSize){
 
         Page<Goods> page = new Page<>(pageNo,pageSize);
-        return goodsService.page(page);
+        return goodsService.page(page,new QueryWrapper<Goods>().eq("GOODS_STORE_ID",UserUtil.getUserId()));
     }
     
     
