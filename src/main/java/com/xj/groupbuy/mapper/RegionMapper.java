@@ -18,4 +18,6 @@ public interface RegionMapper {
     List<Map<String, Object>> getAreasByCityCode(String cityCode);
 
     List<Map<String, Object>> getStreetsByAreaCode(String areaCode);
+
+    List<Map<String, Object>> getCommunityByStreetCode(String streetCode);
 }

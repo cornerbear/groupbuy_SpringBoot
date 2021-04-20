@@ -1,7 +1,7 @@
 package com.xj.groupbuy.service;
 
 import com.xj.groupbuy.common.vo.CommonVO;
-import com.xj.groupbuy.entity.Cart;
+import com.xj.groupbuy.entity.UserApply;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -10,11 +10,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author zhangxiaojian
- * @since 2021-03-07
+ * @since 2021-04-20
  */
-public interface ICartService extends IService<Cart> {
+public interface IUserApplyService extends IService<UserApply> {
 
-    CommonVO addGoodsToCart(Integer goodsId);
-
-    Cart getUserCart(String userId);
+    CommonVO apply(String grouper);
 }

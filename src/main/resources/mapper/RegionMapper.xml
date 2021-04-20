@@ -36,4 +36,14 @@
         where area_code = #{areaCode}
         order by street_code asc
     </select>
+    
+    <select id="getCommunityByStreetCode" resultType="map">
+        select
+            `id` as `value`,
+            `name` as `label`,
+            `detail_location` as `detailLocation`
+        from `community`
+        where street_code = #{streetCode}
+        order by id asc
+    </select>
 </mapper>

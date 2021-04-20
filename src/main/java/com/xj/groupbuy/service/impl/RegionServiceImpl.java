@@ -55,11 +55,18 @@ public class RegionServiceImpl implements IRegionService {
         Map<String,Object> result = new HashMap<>();
         
         result.put("provinceOptions",this.getAllProvinces());
-        result.put("cityOptions",this.getCitysByProvinceCode(parentLevelId.get("provinceCode").toString()));
-        result.put("areaOptions",this.getAreasByCityCode(parentLevelId.get("cityCode").toString()));
-        result.put("streetOptions",this.getStreetsByAreaCode(parentLevelId.get("areaCode").toString()));
-        result.put("checkPath",parentLevelId);
+        if(parentLevelId != null){
+            result.put("cityOptions",this.getCitysByProvinceCode(parentLevelId.get("provinceCode").toString()));
+            result.put("areaOptions",this.getAreasByCityCode(parentLevelId.get("cityCode").toString()));
+            result.put("streetOptions",this.getStreetsByAreaCode(parentLevelId.get("areaCode").toString()));
+            result.put("checkPath",parentLevelId);
+        }
         
         return new CommonVO(true,result);
+    }
+
+    @Override
+    public List<Map<String, Object>> getCommunityByStreetCode(String streetCode) {
+        return regionMapper.getCommunityByStreetCode(streetCode);
     }
 }

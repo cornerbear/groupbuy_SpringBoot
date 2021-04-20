@@ -1,6 +1,6 @@
 package com.xj.groupbuy.mapper;
 
-import com.xj.groupbuy.entity.Cart;
+import com.xj.groupbuy.entity.UserApply;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,9 +10,9 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author zhangxiaojian
- * @since 2021-03-07
+ * @since 2021-04-20
  */
 @Mapper
-public interface CartMapper extends BaseMapper<Cart> {
+public interface UserApplyMapper extends BaseMapper<UserApply> {
 
 }

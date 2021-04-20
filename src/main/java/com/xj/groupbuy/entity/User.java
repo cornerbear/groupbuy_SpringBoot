@@ -34,6 +34,9 @@ public class User implements Serializable, UserDetails {
     @TableId(value = "USER_ID",type = IdType.ASSIGN_ID)
     private String userId;
 
+    @TableField("COMMUNITY_ID")
+    private Integer communityId;
+    
     @TableField("NAME")
     private String name;
     
@@ -43,14 +46,14 @@ public class User implements Serializable, UserDetails {
     @TableField("PASSWORD")
     private String password;
 
-    @TableField("USER_SEX")
-    private Integer userSex;
+    @TableField("SEX")
+    private Boolean sex;
 
-    @TableField("USER_PHONE")
-    private String userPhone;
+    @TableField("PHONE")
+    private String phone;
 
-    @TableField("USER_ADDRESS")
-    private String userAddress;
+    @TableField("detail_ADDRESS")
+    private String detailAddress;
 
     @TableField("ENABLED")
     @Getter(AccessLevel.NONE)

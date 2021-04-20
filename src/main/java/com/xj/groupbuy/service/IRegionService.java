@@ -23,4 +23,6 @@ public interface IRegionService {
     List<Map<String, Object>> getStreetsByAreaCode(String areaCode);
 
     CommonVO getAllLevelByCommunityId(Integer id);
+
+    List<Map<String, Object>> getCommunityByStreetCode(String streetCode);
 }

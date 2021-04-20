@@ -1,9 +1,11 @@
 package com.xj.groupbuy.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xj.groupbuy.common.properties.FileProperties;
 import com.xj.groupbuy.common.util.DateUtil;
 import com.xj.groupbuy.common.util.FileUtil;
 import com.xj.groupbuy.common.util.NullUtils;
+import com.xj.groupbuy.common.util.UserUtil;
 import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.Goods;
 import com.xj.groupbuy.mapper.GoodsMapper;
@@ -57,6 +59,17 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             return new CommonVO(true,"删除成功");
         } else {
             return new CommonVO(false,"删除失败");
+        }
+    }
+
+    @Override
+    public Page<Goods> getCommunityGoods(Boolean select, Page<Goods> page) {
+        
+        if(select){
+            Integer communityId = UserUtil.getCurrentUser().getCommunityId();
+            return goodsMapper.getCommunityGoods(communityId,page);
+        } else {
+            return goodsMapper.selectPage(page,null);
         }
     }
 }
