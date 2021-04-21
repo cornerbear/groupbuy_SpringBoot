@@ -55,7 +55,7 @@
         </if>
         order by u.user_id
     </select>
-    
+
     <select id="selectUserRoles" resultMap="RoleMap">
         select
         r.`role_id` as rid,
