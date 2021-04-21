@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -35,8 +37,12 @@ public class Cart implements Serializable {
     @TableField("GOODS_NUM")
     private Integer goodsNum;
 
+    @TableField(exist = false)
+    private Object cartItems;
 
     public Cart(String userId) {
         this.userId = userId;
+        this.totalPrice = BigDecimal.ZERO;
+        this.goodsNum = 0;
     }
 }

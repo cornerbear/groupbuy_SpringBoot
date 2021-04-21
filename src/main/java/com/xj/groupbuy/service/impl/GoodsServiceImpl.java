@@ -72,4 +72,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             return goodsMapper.selectPage(page,null);
         }
     }
+
+    @Override
+    public Page<Goods> getUserCommunityGoods(Page<Goods> page) {
+        Integer communityId = UserUtil.getCurrentUser().getCommunityId();
+        return goodsMapper.getCommunityGoods(communityId,page);
+    }
+
 }

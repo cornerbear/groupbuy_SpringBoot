@@ -20,6 +20,19 @@
         </collection>
     </resultMap>
     
+    <resultMap id="UserWithSelectRoles" type="com.xj.groupbuy.entity.User" extends="BaseResultMap">
+        <collection property="roles" column="user_id" ofType="com.xj.groupbuy.entity.Role" select="selectUserRoles">
+            <id column="rid" property="roleId"/>
+            <result column="rname" property="name"/>
+            <result column="rnameZh" property="nameZh"/>
+        </collection>
+    </resultMap>
+    <resultMap id="RoleMap" type="com.xj.groupbuy.entity.Role">
+        <id column="rid" property="roleId"/>
+        <result column="rname" property="name"/>
+        <result column="rnameZh" property="nameZh"/>
+    </resultMap>
+    
     <select id="getAllUser" resultMap="UserWithRoles">
         select
         u.user_id,
@@ -42,25 +55,30 @@
         </if>
         order by u.user_id
     </select>
-
-    <select id="getAllUserSimple" resultMap="UserWithRoles">
+    
+    <select id="selectUserRoles" resultMap="RoleMap">
         select
-        u.user_id,
-        u.username,
-        u.name,
-        u.enabled,
         r.`role_id` as rid,
         r.`name` as rname,
         r.`nameZh` as rnameZh
-        from `user` u
-        left join `user_role` ur on u.`user_id`=ur.`user_id`
+        from `user_role` ur
         left join `role` r on ur.`role_id`=r.`role_id`
+        where ur.`user_id`=#{user_id}
+    </select>
+    
+    <select id="getAllUserSimple" resultMap="UserWithSelectRoles">
+        select
+            u.user_id,
+            u.username,
+            u.name,
+            u.enabled
+        from `user` u
         where 1 = 1
         <if test="name!=null">
             and u.name like concat('%',#{name},'%')
         </if>
         <if test="userId!=null">
-            and u.`user_id`==#{userId}
+            and u.`user_id`=#{userId}
         </if>
         order by u.user_id
     </select>

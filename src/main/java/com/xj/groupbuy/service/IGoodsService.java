@@ -21,4 +21,7 @@ public interface IGoodsService extends IService<Goods> {
     CommonVO deleteGoods(Integer id);
 
     Page<Goods> getCommunityGoods(Boolean select, Page<Goods> page);
+
+    Page<Goods> getUserCommunityGoods(Page<Goods> page);
+
 }

@@ -57,6 +57,7 @@
     
     <select id="getAllMenusWithRole" resultMap="MenuWithRole">
         select 
+               distinct m.id,
                m.*,r.`role_id` as rid,
                r.`name` as rname,
                r.`nameZh` as rnameZh 
