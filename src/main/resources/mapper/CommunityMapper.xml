@@ -54,4 +54,20 @@
                 left join `province` p on p.`province_code` = ci.`province_code`
         where co.`id` = #{id}
     </select>
+
+    <select id="getParentLevelName" resultType="map">
+        select
+            p.name as `provinceName`,
+            ci.name as `cityName`,
+            a.name as `areaName`,
+            s.name as `streetName`,
+            co.`id` as `id`
+        from
+            `community` co
+                left join `street` s on s.`street_code` = co.`street_code`
+                left join `area` a on a.`area_code` = s.`area_code`
+                left join `city` ci on ci.`city_code` = a.`city_code`
+                left join `province` p on p.`province_code` = ci.`province_code`
+        where co.`id` = #{id}
+    </select>
 </mapper>

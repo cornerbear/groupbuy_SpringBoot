@@ -1,11 +1,10 @@
 package com.xj.groupbuy.controller.user;
 
 import com.xj.groupbuy.common.vo.CommonVO;
+import com.xj.groupbuy.entity.Order;
 import com.xj.groupbuy.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Author : zhangxiaojian
@@ -19,7 +18,12 @@ public class UserOrderController {
     private IOrderService orderService;
     
     @PostMapping
-    public CommonVO createOrder(){
-        return orderService.createOrder();
+    public CommonVO createOrder(@RequestBody Order order){
+        return orderService.createOrder(order);
+    }
+    
+    @GetMapping("createOrderDetail")
+    public CommonVO getCreateOrderDetail(){
+        return orderService.createOrderDetail();
     }
 }

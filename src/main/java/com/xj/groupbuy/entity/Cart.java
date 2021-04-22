@@ -38,7 +38,7 @@ public class Cart implements Serializable {
     private Integer goodsNum;
 
     @TableField(exist = false)
-    private Object cartItems;
+    private List<CartItem> cartItems;
 
     public Cart(String userId) {
         this.userId = userId;

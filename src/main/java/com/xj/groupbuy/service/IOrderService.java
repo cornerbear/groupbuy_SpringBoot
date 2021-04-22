@@ -14,5 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IOrderService extends IService<Order> {
 
-    CommonVO createOrder();
+    CommonVO createOrder(Order order);
+
+    CommonVO createOrderDetail();
 }

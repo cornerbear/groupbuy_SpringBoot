@@ -23,4 +23,6 @@ public interface CommunityMapper extends BaseMapper<Community> {
     IPage<?> getTable(String provinceCode, String cityCode, String areaCode, String streetCode, Page<Map<String, Object>> page);
 
     Map<String, Object> getParentLevelId(Integer id);
+    
+    Map<String, String> getParentLevelName(Integer id);
 }

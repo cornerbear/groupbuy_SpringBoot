@@ -32,6 +32,12 @@ public class CartItem implements Serializable {
 
     @TableField("GOODS_ID")
     private Integer goodsId;
+    
+    @TableField("GOODS_STORE_ID")
+    private String goodsStoreId;
+    
+    @TableField("GOODS_NUM")
+    private Integer goodsNum;
 
     @TableField("SPEC_KEY")
     private String specKey;
@@ -39,12 +45,9 @@ public class CartItem implements Serializable {
     @TableField("SPEC_KEY_NAME")
     private String specKeyName;
 
-    @TableField("GOODS_NUM")
-    private Integer goodsNum;
-
-
-    public CartItem(Integer cartId, Integer goodsId) {
+    public CartItem(Integer cartId, Integer goodsId, String goodsStoreId) {
         this.cartId = cartId;
         this.goodsId = goodsId;
+        this.goodsStoreId = goodsStoreId;
     }
 }

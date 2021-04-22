@@ -19,7 +19,13 @@ public interface ICartService extends IService<Cart> {
 
     CommonVO addGoodsToCart(Integer goodsId);
 
-    Cart getUserCart(String userId);
+    Cart haveUserCart();
 
-    CommonVO getUserCartWithItems(Integer pageNo,Integer pageSize);
+    CommonVO haveUserCartWithItems(Integer pageNo,Integer pageSize);
+
+    CommonVO removeGoodsFromCart(Integer goodsId);
+
+    Boolean clearCart(Integer cartId);
+
+    CommonVO checkHaveGoods();
 }

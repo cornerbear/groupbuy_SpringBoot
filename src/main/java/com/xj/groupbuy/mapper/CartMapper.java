@@ -15,4 +15,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface CartMapper extends BaseMapper<Cart> {
 
+    Cart selectCartWithItems(String userId);
+
+    Integer selectStoreCount(Integer cartId);
 }

@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,14 +40,8 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
     
     @Override
     public CommonVO addGoodsToCart(Integer goodsId) {
-        Cart cart = this.getUserCart(UserUtil.getUserId());
+        Cart cart = this.haveUserCart();
         Goods goods = goodsMapper.selectById(goodsId);
-
-        if(cart == null){
-            // 用户还没有购物车，创建
-            cart = new Cart(UserUtil.getUserId());
-            cartMapper.insert(cart);
-        }
 
         Integer cartId = cart.getId();
         
@@ -54,7 +49,7 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
         int flag;
         if(cartItemMapper.selectCount(new QueryWrapper<CartItem>().eq("cart_id",cartId).eq("goods_id",goodsId)) == 0){
             // 说明没有
-            CartItem cartItem = new CartItem(cartId, goodsId);
+            CartItem cartItem = new CartItem(cartId, goodsId,goods.getGoodsStoreId());
             flag = cartItemMapper.insert(cartItem);
         } else {
             // 说明购物车已经有了，只需+1
@@ -72,15 +67,52 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
     }
 
     @Override
-    public Cart getUserCart(String userId) {
-        return cartMapper.selectOne(new QueryWrapper<Cart>().eq("user_id",userId));
+    public CommonVO removeGoodsFromCart(Integer goodsId) {
+        Cart cart = this.haveUserCart();
+        Integer cartId = cart.getId();
+        cartItemMapper.delete(new QueryWrapper<CartItem>().eq("cart_id",cartId).eq("goods_id",goodsId));
+        return new CommonVO(true,"从购物车移除成功");
     }
 
     @Override
-    public CommonVO getUserCartWithItems(Integer pageNo,Integer pageSize) {
-        Cart cart = this.getUserCart(UserUtil.getUserId());
-        IPage<?> cartItems = cartItemMapper.getCartItems(cart.getId(),new Page<>(pageNo,pageSize));
-        cart.setCartItems(cartItems);
-        return new CommonVO(true,cart);
+    public Boolean clearCart(Integer cartId) {
+        
+        cartMapper.deleteById(cartId);
+        cartItemMapper.delete(new QueryWrapper<CartItem>().eq("cart_id",cartId));
+        
+        return true;
     }
+
+    @Override
+    public CommonVO checkHaveGoods() {
+        Cart cart = this.haveUserCart();
+        Integer id = cart.getId();
+        Integer goodsCount = cartItemMapper.selectCount(new QueryWrapper<CartItem>().eq("cart_id", id));
+        boolean flag = goodsCount != 0;
+        return new CommonVO(flag,flag?"":"当前无商品");
+    }
+
+    @Override
+    public Cart haveUserCart() {
+        String userId = UserUtil.getUserId();
+        Cart cart = cartMapper.selectOne(new QueryWrapper<Cart>().eq("user_id", userId));
+
+        if(cart == null){
+            // 用户还没有购物车，创建
+            cart = new Cart(userId);
+            cartMapper.insert(cart);
+        }
+        return cart;
+    }
+
+    @Override
+    public CommonVO haveUserCartWithItems(Integer pageNo,Integer pageSize) {
+        Cart cart = this.haveUserCart();
+        IPage<?> cartItems = cartItemMapper.getCartItems(cart.getId(),new Page<>(pageNo,pageSize));
+        Map<String,Object> map = new HashMap<>();
+        map.put("cart",cart);
+        map.put("cartItems",cartItems);
+        return new CommonVO(true,map);
+    }
+
 }

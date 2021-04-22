@@ -58,6 +58,7 @@ public class TransactionConfig {
         Map<String, TransactionAttribute> map = new HashMap<>();
         map.put("add*", requiredTx);//Pointcut匹配到的方法中所有add开头的方法
         map.put("save*", requiredTx);//Pointcut匹配到的方法中所有save开头的方法
+        map.put("create*", requiredTx);//Pointcut匹配到的方法中所有save开头的方法
         map.put("insert*", requiredTx);
         map.put("update*", requiredTx);
         map.put("delete*", requiredTx);

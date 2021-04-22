@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,7 +21,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Order implements Serializable {
+@TableName("`order`")
+public class Order implements Serializable,Cloneable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +33,7 @@ public class Order implements Serializable {
     private String userId;
 
     @TableField("STORE_ID")
-    private Integer storeId;
+    private String storeId;
 
     @TableField("PARENT_ORDER_ID")
     private Integer parentOrderId;
@@ -105,5 +107,8 @@ public class Order implements Serializable {
     @TableField("USER_NOTE")
     private String userNote;
 
-
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
