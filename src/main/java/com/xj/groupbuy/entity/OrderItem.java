@@ -27,8 +27,8 @@ public class OrderItem implements Serializable {
     @TableId(value = "ID",type = IdType.AUTO)
     private Integer id;
 
-    @TableField("PARENT_ORDER_ID")
-    private Integer parentOrderId;
+    @TableField("ORDER_ID")
+    private Integer orderId;
 
     @TableField("GOODS_ID")
     private Integer goodsId;
@@ -49,4 +49,11 @@ public class OrderItem implements Serializable {
     private String specKeyName;
 
 
+    public OrderItem(Integer orderId , CartItem cartItem) {
+        this.orderId = orderId;
+        this.goodsId = cartItem.getGoodsId();
+        this.goodsNum = cartItem.getGoodsNum();
+        this.specKey = cartItem.getSpecKey();
+        this.specKeyName = cartItem.getSpecKeyName();
+    }
 }

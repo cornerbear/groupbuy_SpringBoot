@@ -1,18 +1,16 @@
 package com.xj.groupbuy.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xj.groupbuy.common.util.CloneUtil;
 import com.xj.groupbuy.common.util.DateUtil;
 import com.xj.groupbuy.common.util.UserUtil;
 import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.*;
-import com.xj.groupbuy.mapper.CartMapper;
-import com.xj.groupbuy.mapper.CommunityMapper;
-import com.xj.groupbuy.mapper.GoodsMapper;
-import com.xj.groupbuy.mapper.OrderMapper;
+import com.xj.groupbuy.mapper.*;
 import com.xj.groupbuy.service.ICartService;
 import com.xj.groupbuy.service.IOrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -44,6 +42,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Autowired
     private OrderMapper orderMapper;
     @Autowired
+    private OrderItemMapper orderItemMapper;
+    @Autowired
     private ICartService cartService;
     
     @Override
@@ -54,7 +54,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
         order.setUserId(userId);
         order.setCreateTime(DateUtil.getCurrentDate());
-        order.setOrderStatus("1");
+        order.setOrderStatus("0");
         
         // 分订单
         Set<String> storeIds = new HashSet<>();
@@ -68,6 +68,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             this.calculateOrderPrice(order,null,cartItems);
 
             orderMapper.insert(order);
+            // 保存订单项
+            this.saveOrderItem(order.getId(),cartItems,null);
             
         } else {
             order.setParentOrderId(0);
@@ -88,6 +90,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 this.calculateOrderPrice(sonOrder,storeId,cartItems);
                 
                 orderMapper.insert(sonOrder);
+                
+                // 保存订单项
+                this.saveOrderItem(order.getId(),cartItems,storeId);
             } 
         }
         
@@ -95,6 +100,22 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         Boolean clearFlag = cartService.clearCart(cart.getId());
 
         return new CommonVO(true,"生成订单成功");
+    }
+
+    private void saveOrderItem(Integer orderId, List<CartItem> cartItems, String storeId) {
+        for (CartItem cartItem : cartItems) {
+
+            // 如果不是该商店的就跳过
+            if(storeId != null && !cartItem.getGoodsStoreId().equals(storeId))
+                continue;
+
+            OrderItem orderItem = new OrderItem(orderId,cartItem);
+
+            Goods goods = goodsMapper.selectById(cartItem.getGoodsId());
+            orderItem.setGoodsPrice(goods.getGoodsPrice());
+            orderItem.setGoodsUnit(goods.getGoodsUnit());
+            orderItemMapper.insert(orderItem);
+        }
     }
 
     @Override
@@ -121,6 +142,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         
         return new CommonVO(true,order);
     }
+
+    @Override
+    public IPage<?> getTable(Integer pageNo, Integer pageSize) {
+        Page<Order> page = new Page<>(pageNo, pageSize);
+        return orderMapper.getTable(page);
+    }
+
     private void calculateOrderPrice(Order order,String storeId,List<CartItem> cartItems){
         BigDecimal goodsPrice = BigDecimal.ZERO;
         for (CartItem cartItem : cartItems) {
