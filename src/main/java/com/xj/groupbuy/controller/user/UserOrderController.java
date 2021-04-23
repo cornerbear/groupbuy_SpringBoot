@@ -1,15 +1,12 @@
 package com.xj.groupbuy.controller.user;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xj.groupbuy.common.util.UserUtil;
 import com.xj.groupbuy.common.vo.CommonVO;
-import com.xj.groupbuy.entity.Goods;
 import com.xj.groupbuy.entity.Order;
 import com.xj.groupbuy.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Author : zhangxiaojian
@@ -21,6 +18,17 @@ public class UserOrderController {
     
     @Autowired
     private IOrderService orderService;
+
+    
+    @PutMapping("payForOrder/{orderId}")
+    public CommonVO payForOrder(@PathVariable Integer orderId){
+        return orderService.payForOrder(orderId);
+    }
+
+    @PutMapping("cancelOrder/{orderId}")
+    public CommonVO cancelOrder(@PathVariable Integer orderId){
+        return orderService.cancelOrder(orderId);
+    }
     
     @PostMapping
     public CommonVO createOrder(@RequestBody Order order){

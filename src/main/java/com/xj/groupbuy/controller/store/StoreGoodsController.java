@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequestMapping("store/goods")
-public class GoodsController {
+public class StoreGoodsController {
     
     @Autowired
     private IGoodsService goodsService;

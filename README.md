@@ -1,6 +1,8 @@
 # groupbuy_SpringBoot
 奇奇怪怪的毕设
 
+0.9.5 :new:  支付订单和发货功能
+
 0.9.4 :bug:  修复生成订单bug
 
 0.9.3 :new:  生成订单完成

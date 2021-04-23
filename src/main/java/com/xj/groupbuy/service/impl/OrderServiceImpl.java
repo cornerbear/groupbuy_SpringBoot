@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -149,6 +150,47 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         return orderMapper.getTable(page);
     }
 
+    @Override
+    public CommonVO payForOrder(Integer orderId) {
+        Order order = orderMapper.selectById(orderId);
+        order.setPayPrice(order.getTotalPrice());
+        order.setPayTime(DateUtil.getCurrentDate());
+        
+        order.setOrderStatus("2");
+        
+        orderMapper.updateById(order);
+        return new CommonVO(true,"支付成功");
+    }
+
+    @Override
+    public CommonVO cancelOrder(Integer orderId) {
+        Order order = orderMapper.selectById(orderId);
+
+        order.setOrderStatus("10");
+        orderMapper.updateById(order);
+        return new CommonVO(true,"取消成功");
+    }
+
+    @Override
+    public IPage<?> getStoreOrderTable(String storeId, Integer pageNo, Integer pageSize) {
+
+        Page<Order> page = new Page<>(pageNo, pageSize);
+        return orderMapper.getStoreOrderTable(storeId,page);
+    }
+
+    @Override
+    public CommonVO deliver(Map<String,String> map) {
+        String orderId = map.get("orderId");
+
+        Order order = orderMapper.selectById(orderId);
+        order.setShippingName(map.get("shippingName"));
+        order.setShippingCode(map.get("shippingCode"));
+        order.setOrderStatus("6");
+        orderMapper.updateById(order);
+        return new CommonVO(true,"发货成功");
+
+    }
+
     private void calculateOrderPrice(Order order,String storeId,List<CartItem> cartItems){
         BigDecimal goodsPrice = BigDecimal.ZERO;
         for (CartItem cartItem : cartItems) {
@@ -160,6 +202,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             Goods goods = goodsMapper.selectById(goodsId);
             goodsPrice = goodsPrice.add(goods.getGoodsPrice().multiply(new BigDecimal(cartItem.getGoodsNum())));
         }
+        order.setTotalPrice(goodsPrice);
         order.setGoodsPrice(goodsPrice);
         order.setPayPrice(goodsPrice);
     }

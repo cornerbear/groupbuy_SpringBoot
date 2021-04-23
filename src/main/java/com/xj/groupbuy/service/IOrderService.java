@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.ui.Model;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -22,4 +23,12 @@ public interface IOrderService extends IService<Order> {
     CommonVO createOrderDetail();
 
     IPage<?> getTable(Integer pageNo, Integer pageSize);
+
+    CommonVO payForOrder(Integer orderId);
+
+    CommonVO cancelOrder(Integer orderId);
+
+    IPage<?> getStoreOrderTable(String storeId, Integer pageNo, Integer pageSize);
+
+    CommonVO deliver(Map<String,String> map);
 }
