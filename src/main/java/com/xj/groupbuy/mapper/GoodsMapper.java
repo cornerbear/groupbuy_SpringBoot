@@ -17,4 +17,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface GoodsMapper extends BaseMapper<Goods> {
 
     Page<Goods> getCommunityGoods(Integer communityId, Page<Goods> page);
+
+    Page<Goods> getStoreGoods(Page<Goods> page);
 }

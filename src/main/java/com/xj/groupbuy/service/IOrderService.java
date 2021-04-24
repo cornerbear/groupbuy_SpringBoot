@@ -35,4 +35,6 @@ public interface IOrderService extends IService<Order> {
     CommonVO confirmArrived(Integer orderId);
 
     CommonVO confirmReceive(Integer orderId);
+
+    CommonVO confirmOrderFinish(Integer orderItemId);
 }

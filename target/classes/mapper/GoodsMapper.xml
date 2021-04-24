@@ -6,28 +6,32 @@
     <select id="getCommunityGoods" resultType="map">
         select
             g.id as id,
-            g.goods_store_id as goodsStoreId,
             g.goods_name as goodsName,
-            g.goods_cat as goodsCat,
             g.goods_easy_desc as goodsEasyDesc,
-            g.goods_desc as goodsDesc,
-            g.goods_stock as goodsStock,
-            g.goods_weight as goodsWeight,
             g.goods_unit as goodsUnit,
             g.goods_price as goodsPrice,
             g.goods_img as goodsImg,
-            g.is_on_sale as isOnSale,
-            g.is_free_shipping as isFreeShipping,
-            g.is_recommend as isRecommend,
-            g.is_new as isNew,
-            g.update_time as updateTime,
-            g.sale_count as saleCount,
-            g.integral as integral,
-            c.name as communityName
+            c.`name` as communityName,
+            u.`name` as storeName
         from
             `community_goods` cg
                 left join `goods` g on cg.`goods_id` = g.`id`
                 left join `community` c on cg.`community_id` = c.`id`
+                left join `user` u on g.`goods_store_id` = u.`user_id`
         where cg.`community_id` = #{communityId}
+    </select>
+
+    <select id="getStoreGoods" resultType="map">
+        select
+            g.id as id,
+            g.goods_name as goodsName,
+            g.goods_easy_desc as goodsEasyDesc,
+            g.goods_unit as goodsUnit,
+            g.goods_price as goodsPrice,
+            g.goods_img as goodsImg,
+            u.`name` as storeName
+        from
+            `goods` g
+                left join `user` u on g.`goods_store_id` = u.`user_id`
     </select>
 </mapper>

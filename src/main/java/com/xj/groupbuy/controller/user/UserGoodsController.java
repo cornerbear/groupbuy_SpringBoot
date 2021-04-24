@@ -3,6 +3,7 @@ package com.xj.groupbuy.controller.user;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.Goods;
+import com.xj.groupbuy.entity.GoodsEvaluate;
 import com.xj.groupbuy.service.ICartService;
 import com.xj.groupbuy.service.IGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;

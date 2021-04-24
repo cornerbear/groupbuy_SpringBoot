@@ -7,6 +7,7 @@
             g.goods_name as goodsName,
             g.goods_unit as goodsUnit,
             g.goods_img as goodsImg,
+            oi.`id` as id,
             oi.`goods_price` as goodsPrice,
             oi.`goods_num` as goodsNum
         from

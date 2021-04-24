@@ -25,6 +25,11 @@ public class UserOrderController {
     private IOrderService orderService;
     @Autowired
     private IOrderItemService orderItemService;
+
+    @GetMapping("confirmOrderFinish/{orderItemId}")
+    public CommonVO confirmOrderFinish(@PathVariable Integer orderItemId){
+        return orderService.confirmOrderFinish(orderItemId);
+    }
     
     @PutMapping("confirmReceive/{orderId}")
     public CommonVO confirmReceive(@PathVariable Integer orderId){

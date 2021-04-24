@@ -93,7 +93,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 orderMapper.insert(sonOrder);
                 
                 // 保存订单项
-                this.saveOrderItem(order.getId(),cartItems,storeId);
+                this.saveOrderItem(sonOrder.getId(),cartItems,storeId);
             } 
         }
         
@@ -207,6 +207,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         order.setOrderStatus("8");
         orderMapper.updateById(order);
         return new CommonVO(true,"收货成功");
+    }
+
+    @Override
+    public CommonVO confirmOrderFinish(Integer orderItemId) {
+        OrderItem orderItem = orderItemMapper.selectById(orderItemId);
+        Order order = orderMapper.selectById(orderItem.getOrderId());
+        
+        if("8".equals(order.getOrderStatus())){
+            return new CommonVO(true,"");
+        } else {
+            return new CommonVO(false,"交易未完成，无法评价");
+        }
     }
 
     private void calculateOrderPrice(Order order,String storeId,List<CartItem> cartItems){

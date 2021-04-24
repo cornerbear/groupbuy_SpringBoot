@@ -69,7 +69,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             Integer communityId = UserUtil.getCurrentUser().getCommunityId();
             return goodsMapper.getCommunityGoods(communityId,page);
         } else {
-            return goodsMapper.selectPage(page,null);
+            return goodsMapper.getStoreGoods(page);
         }
     }
 

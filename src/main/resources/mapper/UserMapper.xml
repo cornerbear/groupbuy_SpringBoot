@@ -6,9 +6,9 @@
         <id column="user_id" property="userId" jdbcType="VARCHAR"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
-        <result column="user_sex" property="userSex" jdbcType="VARCHAR"/>
-        <result column="user_phone" property="userPhone" jdbcType="VARCHAR"/>
-        <result column="user_address" property="userAddress" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="enabled" property="enabled" jdbcType="BIT"/>
     </resultMap>
@@ -38,9 +38,9 @@
         u.user_id,
         u.username,
         u.password,
-        u.user_sex,
-        u.user_phone,
-        u.user_address,
+        u.sex,
+        u.phone,
+        u.address,
         u.name,
         u.enabled,
         r.`role_id` as rid,
@@ -96,9 +96,9 @@
         u.user_id,
         u.username,
         u.password,
-        u.user_sex,
-        u.user_phone,
-        u.user_address,
+        u.sex,
+        u.phone,
+        u.address,
         u.name,
         u.enabled 
         from `user` u

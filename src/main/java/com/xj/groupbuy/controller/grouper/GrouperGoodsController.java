@@ -37,7 +37,13 @@ public class GrouperGoodsController {
     }
     @PostMapping("addCommunityGoods/{id}")
     public CommonVO addCommunityGoods(@PathVariable Integer id){
-        boolean save = communityGoodsService.save(new CommunityGoods(id, UserUtil.getCurrentUser().getCommunityId()));
-        return new CommonVO(save,save?"添加成功":"添加失败");
+        int count = communityGoodsService.count(new QueryWrapper<CommunityGoods>().eq("goods_id", id).eq("community_id", UserUtil.getCurrentUser().getCommunityId()));
+        if(count == 0){
+
+            boolean save = communityGoodsService.save(new CommunityGoods(id, UserUtil.getCurrentUser().getCommunityId()));
+            return new CommonVO(save,save?"添加成功":"添加失败");
+        } else {
+            return new CommonVO(false,"社区已存在该商品");
+        }
     }
 }
