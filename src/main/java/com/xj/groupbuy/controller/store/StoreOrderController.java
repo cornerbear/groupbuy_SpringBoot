@@ -23,17 +23,20 @@ public class StoreOrderController {
     
     @Autowired
     private IOrderService orderService;
+
+    @PutMapping("confirmArrived/{orderId}")
+    public CommonVO confirmArrived(@PathVariable Integer orderId){
+        return orderService.confirmArrived(orderId);
+    }
     
     @PutMapping("deliver")
     public CommonVO deliver(@RequestBody Map<String,String> map){
         return orderService.deliver(map);
     }
-
     
     @GetMapping("all/{pageNo}/{pageSize}")
     public IPage<?> getStoreOrderTable(@PathVariable(value = "pageNo") Integer pageNo, @PathVariable(value = "pageSize") Integer pageSize){
 
-        
         return orderService.getStoreOrderTable(UserUtil.getUserId(),pageNo,pageSize);
     }
     

@@ -48,6 +48,7 @@ public class OrderItem implements Serializable {
     @TableField("SPEC_KEY_NAME")
     private String specKeyName;
 
+    public OrderItem(){}
 
     public OrderItem(Integer orderId , CartItem cartItem) {
         this.orderId = orderId;

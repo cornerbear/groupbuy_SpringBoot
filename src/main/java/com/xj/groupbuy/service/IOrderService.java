@@ -31,4 +31,8 @@ public interface IOrderService extends IService<Order> {
     IPage<?> getStoreOrderTable(String storeId, Integer pageNo, Integer pageSize);
 
     CommonVO deliver(Map<String,String> map);
+
+    CommonVO confirmArrived(Integer orderId);
+
+    CommonVO confirmReceive(Integer orderId);
 }

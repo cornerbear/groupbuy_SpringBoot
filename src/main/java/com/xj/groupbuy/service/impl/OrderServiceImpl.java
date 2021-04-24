@@ -191,6 +191,24 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     }
 
+    @Override
+    public CommonVO confirmArrived(Integer orderId) {
+        Order order = orderMapper.selectById(orderId);
+
+        order.setOrderStatus("7");
+        orderMapper.updateById(order);
+        return new CommonVO(true,"确认成功");
+    }
+
+    @Override
+    public CommonVO confirmReceive(Integer orderId) {
+        Order order = orderMapper.selectById(orderId);
+
+        order.setOrderStatus("8");
+        orderMapper.updateById(order);
+        return new CommonVO(true,"收货成功");
+    }
+
     private void calculateOrderPrice(Order order,String storeId,List<CartItem> cartItems){
         BigDecimal goodsPrice = BigDecimal.ZERO;
         for (CartItem cartItem : cartItems) {
