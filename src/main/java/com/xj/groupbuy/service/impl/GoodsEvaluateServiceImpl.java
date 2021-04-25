@@ -1,5 +1,6 @@
 package com.xj.groupbuy.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xj.groupbuy.common.util.DateUtil;
 import com.xj.groupbuy.common.vo.CommonVO;
 import com.xj.groupbuy.entity.GoodsEvaluate;
@@ -9,6 +10,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -34,5 +37,11 @@ public class GoodsEvaluateServiceImpl extends ServiceImpl<GoodsEvaluateMapper, G
         int insert = goodsEvaluateMapper.insert(goodsEvaluate);
 
         return new CommonVO(insert==1,insert==1?"评价成功":"评价失败");
+    }
+
+    @Override
+    public CommonVO getGoodsEvaluate(Integer goodsId) {
+        List<?> goodsEvaluates = goodsEvaluateMapper.getGoodsEvaluate(goodsId);
+        return new CommonVO(true,goodsEvaluates);
     }
 }

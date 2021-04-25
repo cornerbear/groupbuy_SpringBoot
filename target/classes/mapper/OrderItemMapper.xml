@@ -9,10 +9,14 @@
             g.goods_img as goodsImg,
             oi.`id` as id,
             oi.`goods_price` as goodsPrice,
-            oi.`goods_num` as goodsNum
+            oi.`goods_num` as goodsNum,
+            ge.`level` as level,
+            ge.`user_note` as userNote,
+            ge.`create_time` as createTime
         from
             `order_item` oi
                 left join `goods` g on oi.`goods_id` = g.`id`
+                left join `goods_evaluate` ge on oi.`id` = ge.`order_item_id`
         where oi.`order_id` = #{orderId}
     </select>
 </mapper>

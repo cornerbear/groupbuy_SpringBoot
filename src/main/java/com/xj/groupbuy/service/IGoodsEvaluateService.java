@@ -15,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IGoodsEvaluateService extends IService<GoodsEvaluate> {
 
     CommonVO saveUserGoodsEvaluate(GoodsEvaluate goodsEvaluate);
+
+    CommonVO getGoodsEvaluate(Integer goodsId);
 }

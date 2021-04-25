@@ -22,6 +22,11 @@ public class UserGoodsEvaluateController {
     @Autowired
     private IGoodsEvaluateService goodsEvaluateService;
     
+    @GetMapping("{goodsId}")
+    public CommonVO getGoodsEvaluate(@PathVariable Integer goodsId){
+        return goodsEvaluateService.getGoodsEvaluate(goodsId);
+    }
+    
     @PostMapping
     public CommonVO saveUserGoodsEvaluate(@RequestBody GoodsEvaluate goodsEvaluate){
         return goodsEvaluateService.saveUserGoodsEvaluate(goodsEvaluate);
