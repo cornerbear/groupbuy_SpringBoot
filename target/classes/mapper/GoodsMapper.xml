@@ -34,4 +34,34 @@
             `goods` g
                 left join `user` u on g.`goods_store_id` = u.`user_id`
     </select>
+
+    <select id="getStoreDayData" resultType="map">
+        select
+            g.`goods_name` as goodsName,
+            sum(oi.`goods_num`) as goodsSale,
+            sum(oi.`goods_price` * oi.`goods_num`) as goodsMoney
+        from
+            `order` o
+                left join `order_item` oi on o.`id` = oi.`order_id`
+                left join `goods` g on g.`id` = oi.`goods_id`
+        where 
+            o.`store_id` = #{storeId}
+            and o.`create_time` like concat(#{date},'%')
+        group by g.`goods_name`
+    </select>
+    
+    <select id="getStoreMonthAnalysis" resultType="map">
+        select
+            g.`goods_name` as goodsName,
+            sum(oi.`goods_num`) as goodsSale,
+            sum(oi.`goods_price` * oi.`goods_num`) as goodsMoney
+        from
+            `order` o
+                left join `order_item` oi on o.`id` = oi.`order_id`
+                left join `goods` g on g.`id` = oi.`goods_id`
+        where
+            o.`store_id` = #{storeId}
+          and o.`create_time` > #{date}
+        group by g.`goods_name`
+    </select>
 </mapper>

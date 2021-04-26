@@ -1,6 +1,8 @@
 # groupbuy_SpringBoot
 奇奇怪怪的毕设
 
+## 0.12 :tada:  统计中心完成
+
 ##0.11 :tada:  公告管理完成
 
 ## 0.10 :tada:  评论管理完成
