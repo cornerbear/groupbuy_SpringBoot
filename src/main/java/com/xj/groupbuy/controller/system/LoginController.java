@@ -3,6 +3,7 @@ package com.xj.groupbuy.controller.system;
 
 import com.xj.groupbuy.common.util.VerificationCode;
 import com.xj.groupbuy.entity.User;
+import com.xj.groupbuy.service.ILoginService;
 import com.xj.groupbuy.service.IUserService;
 import com.xj.groupbuy.common.vo.CommonVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -32,7 +34,13 @@ public class LoginController {
     private IUserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ILoginService loginService;
     
+    @GetMapping("checkLogin")
+    public CommonVO checkLogin(HttpServletRequest request,HttpServletResponse response){
+        return loginService.checkLogin(request,response);
+    }
     
     @PostMapping("register")
     public CommonVO userRegister(@RequestBody Map<String,String> data,HttpServletRequest request){
