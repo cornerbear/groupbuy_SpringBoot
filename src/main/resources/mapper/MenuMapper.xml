@@ -72,19 +72,16 @@
         order by m.`id`
     </select>
 
-    <select id="getMenusByUserId" resultMap="BaseResultMap">
+    <select id="getMenusByUserId" resultMap="Menus2">
         select 
                m.*
         from 
-             menu m,
-             user_role ur,
-             role_menu rm 
+             menu m
+                left join role_menu rm on rm.`menu_id` = m.`id`
+                left join user_role ur on ur.`role_id` = rm.`role_id`
+                left join menu m2 on m2.`parent_id` = m.`id`
         where 
             ur.`user_id`=#{userId} 
-          and
-            ur.`role_id`=rm.`role_id` 
-          and
-            rm.`menu_id`=m.`id` 
         order by 
                  m.`id`
     </select>

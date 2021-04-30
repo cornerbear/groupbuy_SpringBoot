@@ -40,7 +40,7 @@
         u.password,
         u.sex,
         u.phone,
-        u.address,
+        u.detailAddress,
         u.name,
         u.enabled,
         r.`role_id` as rid,
@@ -98,7 +98,7 @@
         u.password,
         u.sex,
         u.phone,
-        u.address,
+        u.detailAddress,
         u.name,
         u.enabled 
         from `user` u

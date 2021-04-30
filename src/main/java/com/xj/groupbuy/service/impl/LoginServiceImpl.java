@@ -41,6 +41,8 @@ public class LoginServiceImpl implements ILoginService {
         }
         Authentication authentication = rememberMeServices.autoLogin(request, response);
         if (authentication != null) {
+            User user = (User) authentication.getPrincipal();
+            user.setPassword(null);
             return new CommonVO(true, authentication.getPrincipal());
         }
         return new CommonVO(false, "");
