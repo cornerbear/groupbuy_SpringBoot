@@ -25,32 +25,32 @@ class GroupbuyApplicationTests {
     @Autowired
     SqlSessionFactory sqlSessionFactory;
     
-    @Test
-    void contextLoads() {
-
-        Integer integer = jdbcTemplate.queryForObject("select count(*) from ttest", Integer.class);
-        log.info("记录总数: {}",integer);
-        
-        log.info("shujuyuanleixing: {}",dataSource.getClass());
-
-    }
-    
-    @Test
-    void testRedis(){
-        ValueOperations<String, String> operations = redisTemplate.opsForValue();
-        
-        operations.set("hello","world");
-
-        String hello = operations.get("hello");
-        System.out.println(hello);
-    }
-    
-    @Test
-    void testSqlSession(){
-        System.out.println(sqlSessionFactory.getClass());
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        
-        System.out.println();
-    }
+//    @Test
+//    void contextLoads() {
+//
+//        Integer integer = jdbcTemplate.queryForObject("select count(*) from ttest", Integer.class);
+//        log.info("记录总数: {}",integer);
+//        
+//        log.info("shujuyuanleixing: {}",dataSource.getClass());
+//
+//    }
+//    
+//    @Test
+//    void testRedis(){
+//        ValueOperations<String, String> operations = redisTemplate.opsForValue();
+//        
+//        operations.set("hello","world");
+//
+//        String hello = operations.get("hello");
+//        System.out.println(hello);
+//    }
+//    
+//    @Test
+//    void testSqlSession(){
+//        System.out.println(sqlSessionFactory.getClass());
+//        SqlSession sqlSession = sqlSessionFactory.openSession();
+//        
+//        System.out.println();
+//    }
 
 }
