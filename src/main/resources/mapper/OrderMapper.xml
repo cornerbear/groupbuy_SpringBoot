@@ -24,8 +24,8 @@
                    else '' end) as `orderStatus`
         from `order` o
             left join `user` u on o.store_id = u.user_id
-        
-        where o.parent_order_id != 0
+        where o.store_id != 0
+            and o.user_id = #{userId}
         order by o.create_time asc
     </select>
     
@@ -54,8 +54,7 @@
                  else '' end) as `orderStatus`
         from `order` o
                  left join `user` u on o.store_id = u.user_id
-        where o.parent_order_id != 0
-            and u.`user_id` = #{storeId}
+        where u.`user_id` = #{storeId}
         order by o.create_time asc
     </select>
 </mapper>

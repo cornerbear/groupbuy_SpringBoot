@@ -19,7 +19,7 @@ import java.util.List;
 @Mapper
 public interface OrderMapper extends BaseMapper<Order> {
 
-    IPage<?> getTable(Page<Order> page);
+    IPage<?> getTable(String userId,Page<Order> page);
 
     IPage<?> getStoreOrderTable(String storeId, Page<Order> page);
 }
