@@ -23,7 +23,7 @@ public interface ICartService extends IService<Cart> {
 
     CommonVO haveUserCartWithItems(Integer pageNo,Integer pageSize);
 
-    CommonVO removeGoodsFromCart(Integer goodsId);
+    CommonVO removeGoodsFromCart(Integer cartItemId);
 
     Boolean clearCart(Integer cartId);
 

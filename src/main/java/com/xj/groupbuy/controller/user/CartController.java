@@ -29,9 +29,9 @@ public class CartController {
         return cartService.addGoodsToCart(goodsId);
     }
     
-    @DeleteMapping("{goodsId}")
-    public CommonVO removeGoodsFromCart(@PathVariable Integer goodsId){
-        return cartService.removeGoodsFromCart(goodsId);
+    @DeleteMapping("{cartItemId}")
+    public CommonVO removeGoodsFromCart(@PathVariable Integer cartItemId){
+        return cartService.removeGoodsFromCart(cartItemId);
     }
     
     @GetMapping("all/{pageNo}/{pageSize}")

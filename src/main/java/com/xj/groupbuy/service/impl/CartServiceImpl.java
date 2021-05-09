@@ -67,10 +67,8 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
     }
 
     @Override
-    public CommonVO removeGoodsFromCart(Integer goodsId) {
-        Cart cart = this.haveUserCart();
-        Integer cartId = cart.getId();
-        cartItemMapper.delete(new QueryWrapper<CartItem>().eq("cart_id",cartId).eq("goods_id",goodsId));
+    public CommonVO removeGoodsFromCart(Integer cartItemId) {
+        cartItemMapper.deleteById(cartItemId);
         return new CommonVO(true,"从购物车移除成功");
     }
 

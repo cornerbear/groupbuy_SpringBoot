@@ -4,6 +4,7 @@
     
     <select id="getCartItems" resultType="map">
         select
+            ci.`id` as `id`,
             g.`goods_name` as `goodsName`,
             g.`goods_unit` as `goodsUnit`,
             g.`goods_price` as `goodsPrice`,
