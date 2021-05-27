@@ -1,9 +1,14 @@
 package com.xj.groupbuy.controller.system;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xj.groupbuy.common.util.VerificationCode;
+import com.xj.groupbuy.entity.Role;
 import com.xj.groupbuy.entity.User;
+import com.xj.groupbuy.entity.UserRole;
 import com.xj.groupbuy.service.ILoginService;
+import com.xj.groupbuy.service.IRoleService;
+import com.xj.groupbuy.service.IUserRoleService;
 import com.xj.groupbuy.service.IUserService;
 import com.xj.groupbuy.common.vo.CommonVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +38,10 @@ public class LoginController {
     @Autowired
     private IUserService userService;
     @Autowired
+    private IUserRoleService userRoleService;
+    @Autowired
+    private IRoleService roleService;
+    @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private ILoginService loginService;
@@ -58,7 +67,12 @@ public class LoginController {
             return new CommonVO(false,"用户名已存在");
         }
         String encode = passwordEncoder.encode(password);
-        boolean save = userService.save(new User(username, encode));
+        User user = new User(username, encode);
+        boolean save = userService.save(user);
+        Role role = roleService.getOne(new QueryWrapper<Role>().eq("name", "ROLE_USER"));
+        UserRole userRole = new UserRole(user.getUserId(), role.getRoleId());
+        boolean save1 = userRoleService.save(userRole);
+
         return new CommonVO(save,save?"注册成功":"注册失败");
     }
 
