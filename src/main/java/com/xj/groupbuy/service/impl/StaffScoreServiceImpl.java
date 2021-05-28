@@ -33,7 +33,7 @@ public class StaffScoreServiceImpl extends ServiceImpl<StaffScoreMapper, StaffSc
     // 为了摆脱事务的影响，所以用got
     @Override
     public CommonVO gotStaffScore(String userId) {
-        boolean isStaff = userRoleService.checkRole(userId,"ROLE_STAFF");
+        boolean isStaff = userRoleService.checkRole(userId,"ROLE_GROUPER");
         if(isStaff){
             StaffScore staffScore = staffScoreMapper.selectOne(new QueryWrapper<StaffScore>().eq("user_id", userId));
             if(staffScore == null){

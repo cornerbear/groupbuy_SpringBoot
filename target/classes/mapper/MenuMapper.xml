@@ -83,7 +83,7 @@
         where 
             ur.`user_id`=#{userId} 
         order by 
-                 m.`id`
+                 m.`sort`,m.`id`
     </select>
 
     <select id="getAllMenusIdAndName" resultMap="MenuWithChildren">

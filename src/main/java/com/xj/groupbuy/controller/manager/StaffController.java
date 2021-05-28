@@ -16,7 +16,7 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping("manager/staff")
+@RequestMapping("manager/grouper")
 public class StaffController {
     
     @Autowired
@@ -26,17 +26,17 @@ public class StaffController {
 
     @GetMapping("all/{pageNo}/{pageSize}")
     public IPage<?> getAllStaff(@PathVariable(value = "pageNo") Integer pageNo, @PathVariable(value = "pageSize") Integer pageSize) {
-        return userService.getUsersByRole("ROLE_STAFF",pageNo,pageSize);
+        return userService.getUsersByRole("ROLE_GROUPER",pageNo,pageSize);
     }
     @DeleteMapping("{userId}")
     public CommonVO deleteStaff(@PathVariable String userId){
-        return userRoleService.deleteRole(userId,"ROLE_STAFF");
+        return userRoleService.deleteRole(userId,"ROLE_GROUPER");
     }
 
     @PostMapping("batchAdd")
     public CommonVO addStaffBatch(@RequestParam("files") MultipartFile[] files){
         try {
-            return userRoleService.addRoleBatch(files,"ROLE_STAFF");
+            return userRoleService.addRoleBatch(files,"ROLE_GROUPER");
         } catch (Exception e) {
             e.printStackTrace();
             return new CommonVO(false,"文件上传失败，请检查格式");
@@ -46,7 +46,7 @@ public class StaffController {
     @PostMapping("singleAdd/{userId}")
     public CommonVO addStaffSingle(@PathVariable String userId){
         try {
-            return userRoleService.addRoleSingle(userId,"ROLE_STAFF");
+            return userRoleService.addRoleSingle(userId,"ROLE_GROUPER");
             
         } catch (Exception e) {
             e.printStackTrace();
