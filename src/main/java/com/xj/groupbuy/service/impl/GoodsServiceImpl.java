@@ -35,15 +35,18 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     @Override
     public CommonVO updateGoods(MultipartFile[] multipartFiles, Goods goods) {
 
-        String uploadPath = null;
-        for (MultipartFile multipartFile : multipartFiles) {
-            uploadPath = FileUtil.upload(multipartFile, fileProperties.getPath(), multipartFile.getOriginalFilename());
+        if(multipartFiles != null){
+
+            String uploadPath = null;
+            for (MultipartFile multipartFile : multipartFiles) {
+                uploadPath = FileUtil.upload(multipartFile, fileProperties.getPath(), multipartFile.getOriginalFilename());
+            }
+            if(NullUtils.isNotEmpty(goods.getGoodsImg())){
+                // 删除旧照片
+                FileUtil.delete(goods.getGoodsImg());
+            }
+            goods.setGoodsImg(uploadPath);
         }
-        if(NullUtils.isNotEmpty(goods.getGoodsImg())){
-            // 删除旧照片
-            FileUtil.delete(goods.getGoodsImg());
-        }
-        goods.setGoodsImg(uploadPath);
         goods.setUpdateTime(DateUtil.getCurrentDate());
         int i = goodsMapper.updateById(goods);
         return new CommonVO(i==1,i==1?"修改成功":"修改失败");
