@@ -1,6 +1,8 @@
 # groupbuy_SpringBoot
 奇奇怪怪的毕设
 
+![image](https://user-images.githubusercontent.com/35026627/227847997-395eec23-0fd4-4495-9a0b-6b23253f7cef.png)
+
 如何启动？
 
 拉取项目后，修改 `application.yml` 中的数据库连接信息后启动即可  
