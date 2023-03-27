@@ -1,6 +1,13 @@
 # groupbuy_SpringBoot
 奇奇怪怪的毕设
-# 2023-03-27 回复：数据库表已找到，在files/schema下
+
+如何启动？
+
+拉取项目后，修改 `application.yml` 中的数据库连接信息后启动即可
+默认用户名密码 admin(123456)
+如果不正确，可以再测试类 `GroupbuyApplicationTests.java` 中，加密密码后，直接改数据库 `user` 表中的 `password` 字段即可。
+
+## 2023-03-27 回复：数据库表已找到，在files/schema下
 
 2022-04-26 回复：数据库表已经丢失，有需要的话可以根据mapper的和entity去自己创建数据库
 
@@ -10,7 +17,7 @@
 
 ## 0.12 :tada:  统计中心完成
 
-##0.11 :tada:  公告管理完成
+## 0.11 :tada:  公告管理完成
 
 ## 0.10 :tada:  评论管理完成
 
