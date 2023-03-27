@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/db_groupbuy?serverTimezone=GMT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
     username: root
-    password: root
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     
     druid:

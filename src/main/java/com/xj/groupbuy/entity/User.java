@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -27,6 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
+@TableName("`USER`")
 public class User implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;

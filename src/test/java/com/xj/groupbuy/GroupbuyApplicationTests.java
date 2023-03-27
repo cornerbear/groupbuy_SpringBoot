@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.sql.DataSource;
 
@@ -25,15 +26,17 @@ class GroupbuyApplicationTests {
     @Autowired
     SqlSessionFactory sqlSessionFactory;
     
-//    @Test
-//    void contextLoads() {
-//
+    @Test
+    void encoderPwd() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        System.out.println(encoder.encode("123456"));
+
 //        Integer integer = jdbcTemplate.queryForObject("select count(*) from ttest", Integer.class);
 //        log.info("记录总数: {}",integer);
-//        
-//        log.info("shujuyuanleixing: {}",dataSource.getClass());
 //
-//    }
+//        log.info("shujuyuanleixing: {}",dataSource.getClass());
+
+    }
 //    
 //    @Test
 //    void testRedis(){

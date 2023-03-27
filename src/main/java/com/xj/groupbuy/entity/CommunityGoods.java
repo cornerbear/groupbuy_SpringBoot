@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.xj.groupbuy.common.util.DateUtil;
 import com.xj.groupbuy.common.util.UserUtil;
 import lombok.Data;
@@ -20,6 +21,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
+@TableName("COMMUNITY_GOODS")
 public class CommunityGoods implements Serializable {
 
     private static final long serialVersionUID = 1L;

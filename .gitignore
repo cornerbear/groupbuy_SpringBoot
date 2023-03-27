@@ -1,2 +1,4 @@
 src/main/resources/static/*
 target/*
+.idea
+*.iml
