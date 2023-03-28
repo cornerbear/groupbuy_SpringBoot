@@ -11,6 +11,8 @@
 
 如果不正确，可以再测试类 `GroupbuyApplicationTests.java` 中，加密密码后，直接改数据库 `user` 表中的 `password` 字段即可。
 
+前端项目详见 https://github.com/cornerbear/groupbuy_Vue  
+
 ## 2023-03-27 回复：数据库表已找到，在files/schema下
 
 2022-04-26 回复：数据库表已经丢失，有需要的话可以根据mapper的和entity去自己创建数据库
