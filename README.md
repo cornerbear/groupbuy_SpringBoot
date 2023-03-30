@@ -1,5 +1,5 @@
 # groupbuy_SpringBoot
-奇奇怪怪的毕设
+奇奇怪怪的毕设之社区团购管理系统
 
 ![image](https://user-images.githubusercontent.com/35026627/227847997-395eec23-0fd4-4495-9a0b-6b23253f7cef.png)
 
